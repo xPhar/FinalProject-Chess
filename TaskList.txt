@@ -1,0 +1,14 @@
+Project Task List:
+
+CURRENT FOCUS:
+REMOVE THIS.'s
+Piece selction/highlighting
+
+Next Up:
+Piece Movement
+Capturing
+Timers
+Checks/Checkmate
+Castling
+Settings
+PGN

@@ -32,7 +32,7 @@ public class Main {
 	 */
 	private static void createMainWindow () {
 		// Create and set up the window.
-		JFrame frame = new JFrame ("Frame Title");
+		JFrame frame = new JFrame ("Chess");
 		frame.setDefaultCloseOperation (JFrame.EXIT_ON_CLOSE);
 		frame.setResizable (false);
         frame.setSize(new Dimension(1000, 800));
@@ -53,10 +53,10 @@ public class Main {
             boardSquares[i] = new BoardSquare[8];
             for (int j = 0; j < 8; j++) {
                 if (i % 2 == 0 && j % 2 == 0 || i % 2 != 0 && j % 2 != 0) {
-                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0xEFEFD2));
+                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0xEFEFD2), boardSquares);
                 }
                 else {
-                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0x749454));
+                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0x749454), boardSquares);
                 }
             }
         }
@@ -106,16 +106,16 @@ public class Main {
                 row2 = 6;
             }
 
-            board[row1][0].setPiece(new ChessPiece(4, color));
-            board[row1][1].setPiece(new ChessPiece(3, color));
-            board[row1][2].setPiece(new ChessPiece(2, color));
-            board[row1][3].setPiece(new ChessPiece(5, color));
-            board[row1][4].setPiece(new ChessPiece(6, color));
-            board[row1][5].setPiece(new ChessPiece(2, color));
-            board[row1][6].setPiece(new ChessPiece(3, color));
-            board[row1][7].setPiece(new ChessPiece(4, color));
+            board[row1][0].setPiece(new ChessPiece(4, color, board[row1][0], row1, 0));
+            board[row1][1].setPiece(new ChessPiece(2, color, board[row1][1], row1, 1));
+            board[row1][2].setPiece(new ChessPiece(3, color, board[row1][2], row1, 2));
+            board[row1][3].setPiece(new ChessPiece(5, color, board[row1][3], row1, 3));
+            board[row1][4].setPiece(new ChessPiece(6, color, board[row1][4], row1, 4));
+            board[row1][5].setPiece(new ChessPiece(3, color, board[row1][5], row1, 5));
+            board[row1][6].setPiece(new ChessPiece(2, color, board[row1][6], row1, 6));
+            board[row1][7].setPiece(new ChessPiece(4, color, board[row1][7], row1, 7));
             for (int j = 0; j < 8; j++) {
-                board[row2][j].setPiece(new ChessPiece(1, color));
+                board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], row2, j));
             }
         }
      }
