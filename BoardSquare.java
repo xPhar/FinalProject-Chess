@@ -22,13 +22,18 @@ public class BoardSquare {
         return this.piece;
     }
 
-    public void setPiece(ChessPiece piece) {
+    public ChessPiece setPiece(ChessPiece piece) {
         this.piece = piece;
         panel.add(piece.getLabel());
+        return this.piece;
     }
 
     public void removePiece() {
         this.piece = null;
+    }
+
+    public boolean hasPiece() {
+        return piece != null;
     }
 
     public Dimension getPos() {

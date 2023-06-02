@@ -2,6 +2,8 @@ import javax.swing.JLabel;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
 import javax.swing.ImageIcon;
 
 public class ChessPiece implements MouseListener{
@@ -13,17 +15,19 @@ public class ChessPiece implements MouseListener{
     private boolean hasMoved = false;
     private boolean color;
     private BoardSquare currentSquare;
+    private ArrayList<ChessPiece> chessPieceList;
     private int row;
     private int column;
     static final boolean BLACK = false;
     static final boolean WHITE = true;
 
-    public ChessPiece(int identifier, boolean color, BoardSquare startingSquare, int row, int column) {
+    public ChessPiece(int identifier, boolean color, BoardSquare startingSquare, ArrayList<ChessPiece> pieceList, int row, int column) {
         this.identifier = identifier;
         this.color = color;
         this.currentSquare = startingSquare;
         this.row = row;
         this.column = column;
+        this.chessPieceList = pieceList;
 
         if (identifier == 1) {
             this.name = "Pawn";
@@ -113,6 +117,14 @@ public class ChessPiece implements MouseListener{
         return pieceLabel;
     }
 
+    public boolean getColor() {
+        return color;
+    }
+    
+    public BoardSquare getBoardSquare() {
+        return currentSquare;
+    }
+
     public void setRow(int row) {
         this.row = row;
     }
@@ -126,6 +138,8 @@ public class ChessPiece implements MouseListener{
     }
 
     public void mousePressed(MouseEvent e) {
+        Main.resetTargetted(this.getBoardSquare().getBoard());
+        Main.updateHighLight(chessPieceList, this);
         switch(identifier) {
             case 1:
                 if (color == WHITE) {
@@ -139,19 +153,31 @@ public class ChessPiece implements MouseListener{
                 if (!hasMoved) {
                     currentSquare.getBoard()[row + 2][column].setTargeted();
                 }
+                break;
             case 2:
+                // TODO: Fix this so it wont try to .getPiece() squares without a piece
                 for (int i = column - 2; i <= column + 2; i++) {
-                    // TODO: FIX THIS
+                    if (i < 0 || i > 7) {
+                        continue;
+                    }
                     if (i == column) {
                         continue;
                     }
                     if (i == column + 2 || i == column - 2) {
-                        currentSquare.getBoard()[row + 1][i].setTargeted();
-                        currentSquare.getBoard()[row - 1][i].setTargeted();
+                        if (row + 1 < 7 && currentSquare.getBoard()[row + 1][i].getPiece().getColor() != this.color) {
+                            currentSquare.getBoard()[row + 1][i].setTargeted();
+                        }
+                        if (row - 1 >= 0 && currentSquare.getBoard()[row - 1][i].getPiece().getColor() != this.color) {
+                            currentSquare.getBoard()[row - 1][i].setTargeted();
+                        }
                     }
                     else {
+                        if (row + 2 < 7 && currentSquare.getBoard()[row + 2][i].getPiece().getColor() != this.color) {
                         currentSquare.getBoard()[row + 2][i].setTargeted();
-                        currentSquare.getBoard()[row - 2][i].setTargeted();
+                        }
+                        if (row - 2 >= 0 && currentSquare.getBoard()[row - 2][i].getPiece().getColor() != this.color) {
+                            currentSquare.getBoard()[row - 2][i].setTargeted();
+                        }
                     }
                 }
         }
