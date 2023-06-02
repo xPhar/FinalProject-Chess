@@ -3,6 +3,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+/* FEATURE IDEAS:
+ * Reset Button (with confirmation)
+ * Change grid colours (colour picker)
+ * Flip piece toggle (white vs black move)
+ * Move Log
+ * LONGSHOT: Create/Import PGN ?
+ */ 
+
 public class Main {
 	/**
 	 * MAIN METHOD
@@ -42,7 +50,7 @@ public class Main {
         contentPane.setLayout(new BorderLayout());
         contentPane.setPreferredSize(new Dimension(1000, 800));
 
-        // TODO: Add components to the content pane panel
+        // Create main board panel
         JPanel board = new JPanel();
         board.setSize(800, 800);
         board.setLayout(new GridLayout(8, 8));
