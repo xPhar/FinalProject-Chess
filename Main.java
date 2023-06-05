@@ -33,6 +33,8 @@ public class Main {
      * multiple methods.
 	 */
 
+    private static ChessPiece selectedPiece;
+
 
 
 	/**
@@ -125,9 +127,9 @@ public class Main {
             pieceList.add(board[row1][6].setPiece(new ChessPiece(2, color, board[row1][6], pieceList, row1, 6)));
             pieceList.add(board[row1][7].setPiece(new ChessPiece(4, color, board[row1][7], pieceList, row1, 7)));
 
-            for (int j = 0; j < 8; j++) {
-                pieceList.add(board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], pieceList, row2, j)));
-            }
+            // for (int j = 0; j < 8; j++) {
+            //     pieceList.add(board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], pieceList, row2, j)));
+            // }
         }
     }
 
@@ -137,7 +139,12 @@ public class Main {
                 piece.getBoardSquare().removeHighlight();
             }
         }
+        selectedPiece = newHighlighted;
         newHighlighted.getBoardSquare().setHighlighed();
+    }
+
+    public static ChessPiece getSelectedPiece() {
+        return selectedPiece;
     }
 
     public static void resetTargetted(BoardSquare[][] chessBoard) {

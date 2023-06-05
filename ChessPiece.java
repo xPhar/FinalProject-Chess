@@ -155,7 +155,6 @@ public class ChessPiece implements MouseListener{
                 }
                 break;
             case 2:
-                // TODO: Fix this so it wont try to .getPiece() squares without a piece
                 for (int i = column - 2; i <= column + 2; i++) {
                     if (i < 0 || i > 7) {
                         continue;
@@ -164,22 +163,197 @@ public class ChessPiece implements MouseListener{
                         continue;
                     }
                     if (i == column + 2 || i == column - 2) {
-                        if (row + 1 < 7 && currentSquare.getBoard()[row + 1][i].getPiece().getColor() != this.color) {
+                        if (row + 1 < 7 && (!currentSquare.getBoard()[row + 1][i].hasPiece() || currentSquare.getBoard()[row + 1][i].getPiece().getColor() != this.color)) {
                             currentSquare.getBoard()[row + 1][i].setTargeted();
                         }
-                        if (row - 1 >= 0 && currentSquare.getBoard()[row - 1][i].getPiece().getColor() != this.color) {
+                        if (row - 1 >= 0 && (!currentSquare.getBoard()[row - 1][i].hasPiece() ||currentSquare.getBoard()[row - 1][i].getPiece().getColor() != this.color)) {
                             currentSquare.getBoard()[row - 1][i].setTargeted();
                         }
                     }
                     else {
-                        if (row + 2 < 7 && currentSquare.getBoard()[row + 2][i].getPiece().getColor() != this.color) {
+                        if (row + 2 < 7 &&(!currentSquare.getBoard()[row + 2][i].hasPiece() || currentSquare.getBoard()[row + 2][i].getPiece().getColor() != this.color)) {
                         currentSquare.getBoard()[row + 2][i].setTargeted();
                         }
-                        if (row - 2 >= 0 && currentSquare.getBoard()[row - 2][i].getPiece().getColor() != this.color) {
+                        if (row - 2 >= 0 &&(!currentSquare.getBoard()[row - 2][i].hasPiece() || currentSquare.getBoard()[row - 2][i].getPiece().getColor() != this.color)) {
                             currentSquare.getBoard()[row - 2][i].setTargeted();
                         }
                     }
                 }
+                break;
+            case 3:
+                for (int i = 1; i < 8; i++) {
+                    if (row + i == 8 || column + i == 8) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row + i][column + i].hasPiece()) {
+                        if (currentSquare.getBoard()[row + i][column + i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row + i][column + i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row + i][column + i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row + i == 8 || column - i < 0) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row + i][column - i].hasPiece()) {
+                        if (currentSquare.getBoard()[row + i][column - i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row + i][column - i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row + i][column - i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row - i < 0 || column + i == 8) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row - i][column + i].hasPiece()) {
+                        if (currentSquare.getBoard()[row - i][column + i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row - i][column + i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row - i][column + i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row - i < 0|| column - i < 0) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row - i][column - i].hasPiece()) {
+                        if (currentSquare.getBoard()[row - i][column - i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row - i][column - i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row - i][column - i].setTargeted();
+                }
+                break;
+            case 4:
+                for (int i = row + 1; i < 8; i++) {
+                    if (currentSquare.getBoard()[i][column].hasPiece()) {
+                        if (currentSquare.getBoard()[i][column].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[i][column].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[i][column].setTargeted();
+                }
+                for (int i = row - 1; i >= 0; i--) {
+                    if (currentSquare.getBoard()[i][column].hasPiece()) {
+                        if (currentSquare.getBoard()[i][column].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[i][column].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[i][column].setTargeted();
+                }
+                for (int i = column + 1; i < 8; i++) {
+                    if (currentSquare.getBoard()[row][i].hasPiece()) {
+                        if (currentSquare.getBoard()[row][i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row][i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row][i].setTargeted();
+                }
+                for (int i = column - 1; i >= 0; i--) {
+                    if (currentSquare.getBoard()[row][i].hasPiece()) {
+                        if (currentSquare.getBoard()[row][i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row][i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row][i].setTargeted();
+                }
+                break;
+            case 5:
+                for (int i = 1; i < 8; i++) {
+                    if (row + i == 8 || column + i == 8) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row + i][column + i].hasPiece()) {
+                        if (currentSquare.getBoard()[row + i][column + i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row + i][column + i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row + i][column + i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row + i == 8 || column - i < 0) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row + i][column - i].hasPiece()) {
+                        if (currentSquare.getBoard()[row + i][column - i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row + i][column - i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row + i][column - i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row - i < 0 || column + i == 8) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row - i][column + i].hasPiece()) {
+                        if (currentSquare.getBoard()[row - i][column + i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row - i][column + i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row - i][column + i].setTargeted();
+                }
+                for (int i = 1; i < 8; i++) {
+                    if (row - i < 0|| column - i < 0) {
+                        break;
+                    }
+                    if (currentSquare.getBoard()[row - i][column - i].hasPiece()) {
+                        if (currentSquare.getBoard()[row - i][column - i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row - i][column - i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row - i][column - i].setTargeted();
+                }
+                for (int i = row + 1; i < 8; i++) {
+                    if (currentSquare.getBoard()[i][column].hasPiece()) {
+                        if (currentSquare.getBoard()[i][column].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[i][column].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[i][column].setTargeted();
+                }
+                for (int i = row - 1; i >= 0; i--) {
+                    if (currentSquare.getBoard()[i][column].hasPiece()) {
+                        if (currentSquare.getBoard()[i][column].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[i][column].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[i][column].setTargeted();
+                }
+                for (int i = column + 1; i < 8; i++) {
+                    if (currentSquare.getBoard()[row][i].hasPiece()) {
+                        if (currentSquare.getBoard()[row][i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row][i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row][i].setTargeted();
+                }
+                for (int i = column - 1; i >= 0; i--) {
+                    if (currentSquare.getBoard()[row][i].hasPiece()) {
+                        if (currentSquare.getBoard()[row][i].getPiece().getColor() == !this.color) {
+                            currentSquare.getBoard()[row][i].setTargeted();
+                        }
+                        break;
+                    }
+                    currentSquare.getBoard()[row][i].setTargeted();
+                }
+                break;
         }
     }
 
