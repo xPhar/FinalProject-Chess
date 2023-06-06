@@ -110,17 +110,17 @@ public class Main {
                 row2 = 6;
             }
 
-            pieceList.add(board[row1][0].setPiece(new ChessPiece(4, color, board[row1][0], pieceList, row1, 0)));
-            pieceList.add(board[row1][1].setPiece(new ChessPiece(2, color, board[row1][1], pieceList, row1, 1)));
-            pieceList.add(board[row1][2].setPiece(new ChessPiece(3, color, board[row1][2], pieceList, row1, 2)));
-            pieceList.add(board[row1][3].setPiece(new ChessPiece(5, color, board[row1][3], pieceList, row1, 3)));
-            pieceList.add(board[row1][4].setPiece(new ChessPiece(6, color, board[row1][4], pieceList, row1, 4)));
-            pieceList.add(board[row1][5].setPiece(new ChessPiece(3, color, board[row1][5], pieceList, row1, 5)));
-            pieceList.add(board[row1][6].setPiece(new ChessPiece(2, color, board[row1][6], pieceList, row1, 6)));
-            pieceList.add(board[row1][7].setPiece(new ChessPiece(4, color, board[row1][7], pieceList, row1, 7)));
+            pieceList.add(board[row1][0].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][0], pieceList, row1, 0)));
+            pieceList.add(board[row1][1].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][1], pieceList, row1, 1)));
+            pieceList.add(board[row1][2].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][2], pieceList, row1, 2)));
+            pieceList.add(board[row1][3].setPiece(new ChessPiece(ChessPiece.QUEEN, color, board[row1][3], pieceList, row1, 3)));
+            pieceList.add(board[row1][4].setPiece(new ChessPiece(ChessPiece.KING, color, board[row1][4], pieceList, row1, 4)));
+            pieceList.add(board[row1][5].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][5], pieceList, row1, 5)));
+            pieceList.add(board[row1][6].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][6], pieceList, row1, 6)));
+            pieceList.add(board[row1][7].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][7], pieceList, row1, 7)));
 
             // for (int j = 0; j < 8; j++) {
-            //     pieceList.add(board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], pieceList, row2, j)));
+            //     pieceList.add(board[row2][j].setPiece(new ChessPiece(ChessPiece.PAWN, color, board[row2][j], pieceList, row2, j)));
             // }
         }
     }
