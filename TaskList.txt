@@ -12,3 +12,9 @@ Checks/Checkmate
 Castling
 Settings
 PGN
+
+FEATURE IDEAS:
+Reset Button (with confirmation)
+Change grid colours (colour picker)
+Flip piece toggle (white vs black move)
+Move Log

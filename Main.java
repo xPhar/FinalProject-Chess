@@ -3,14 +3,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-/* FEATURE IDEAS:
- * Reset Button (with confirmation)
- * Change grid colours (colour picker)
- * Flip piece toggle (white vs black move)
- * Move Log
- * LONGSHOT: Create/Import PGN ?
- */ 
-
 public class Main {
 	/**
 	 * MAIN METHOD
