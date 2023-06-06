@@ -1,5 +1,11 @@
 Project Task List:
 
+*************************************************
+* USE STATIC VARIABLES TO MAKE LIFE 100x EASIER *
+*************************************************
+Refactor some of the messy board refferences and other
+scuffed stuff with the few current methods
+
 CURRENT FOCUS:
 REMOVE THIS.'s
 Piece selction/highlighting

@@ -2,6 +2,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 
 public class Main {
 	/**
@@ -23,6 +24,8 @@ public class Main {
 	 * Declare the objects and variables that you want to access across
      * multiple methods.
 	 */
+
+    private static ChessPiece selectedPiece;
 
 
 
@@ -47,6 +50,7 @@ public class Main {
         board.setSize(800, 800);
         board.setLayout(new GridLayout(8, 8));
 
+        ArrayList<ChessPiece> activePieces = new ArrayList<ChessPiece>(32);
         BoardSquare[][] boardSquares = new BoardSquare[8][];
 
         for (int i = 0; i < 8; i++) {
@@ -72,7 +76,7 @@ public class Main {
         contentPane.add(sidebar, BorderLayout.EAST);
 
         // Create starting gameboard
-        resetBoard(boardSquares);
+        resetBoard(boardSquares, activePieces);
 
 		// Add the panel to the frame
 		frame.setContentPane(contentPane);
@@ -89,7 +93,7 @@ public class Main {
      * Methods that you create to manage repetitive tasks.
      */
     
-     public static void resetBoard(BoardSquare[][] board) {
+    public static void resetBoard(BoardSquare[][] board, ArrayList<ChessPiece> pieceList) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 board[i][j].removePiece();
@@ -106,20 +110,42 @@ public class Main {
                 row2 = 6;
             }
 
-            board[row1][0].setPiece(new ChessPiece(4, color, board[row1][0], row1, 0));
-            board[row1][1].setPiece(new ChessPiece(2, color, board[row1][1], row1, 1));
-            board[row1][2].setPiece(new ChessPiece(3, color, board[row1][2], row1, 2));
-            board[row1][3].setPiece(new ChessPiece(5, color, board[row1][3], row1, 3));
-            board[row1][4].setPiece(new ChessPiece(6, color, board[row1][4], row1, 4));
-            board[row1][5].setPiece(new ChessPiece(3, color, board[row1][5], row1, 5));
-            board[row1][6].setPiece(new ChessPiece(2, color, board[row1][6], row1, 6));
-            board[row1][7].setPiece(new ChessPiece(4, color, board[row1][7], row1, 7));
-            for (int j = 0; j < 8; j++) {
-                board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], row2, j));
+            pieceList.add(board[row1][0].setPiece(new ChessPiece(4, color, board[row1][0], pieceList, row1, 0)));
+            pieceList.add(board[row1][1].setPiece(new ChessPiece(2, color, board[row1][1], pieceList, row1, 1)));
+            pieceList.add(board[row1][2].setPiece(new ChessPiece(3, color, board[row1][2], pieceList, row1, 2)));
+            pieceList.add(board[row1][3].setPiece(new ChessPiece(5, color, board[row1][3], pieceList, row1, 3)));
+            pieceList.add(board[row1][4].setPiece(new ChessPiece(6, color, board[row1][4], pieceList, row1, 4)));
+            pieceList.add(board[row1][5].setPiece(new ChessPiece(3, color, board[row1][5], pieceList, row1, 5)));
+            pieceList.add(board[row1][6].setPiece(new ChessPiece(2, color, board[row1][6], pieceList, row1, 6)));
+            pieceList.add(board[row1][7].setPiece(new ChessPiece(4, color, board[row1][7], pieceList, row1, 7)));
+
+            // for (int j = 0; j < 8; j++) {
+            //     pieceList.add(board[row2][j].setPiece(new ChessPiece(1, color, board[row2][j], pieceList, row2, j)));
+            // }
+        }
+    }
+
+    public static void updateHighLight(ArrayList<ChessPiece> pieceList, ChessPiece newHighlighted) {
+        for (ChessPiece piece : pieceList) {
+            if (piece != newHighlighted) {
+                piece.getBoardSquare().removeHighlight();
             }
         }
-     }
+        selectedPiece = newHighlighted;
+        newHighlighted.getBoardSquare().setHighlighed();
+    }
 
+    public static ChessPiece getSelectedPiece() {
+        return selectedPiece;
+    }
+
+    public static void resetTargetted(BoardSquare[][] chessBoard) {
+        for (BoardSquare[] row : chessBoard) {
+            for (BoardSquare square : row) {
+                square.removeHighlight();
+            }
+        }
+    }
 
     /**
      * EVENT LISTENERS
