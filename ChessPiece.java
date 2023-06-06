@@ -20,6 +20,12 @@ public class ChessPiece implements MouseListener{
     private int column;
     static final boolean BLACK = false;
     static final boolean WHITE = true;
+    static final int PAWN = 1;
+    static final int KNIGHT = 2;
+    static final int BISHOP = 3;
+    static final int ROOK = 4;
+    static final int QUEEN = 5;
+    static final int KING = 6;
 
     public ChessPiece(int identifier, boolean color, BoardSquare startingSquare, ArrayList<ChessPiece> pieceList, int row, int column) {
         this.identifier = identifier;
@@ -29,7 +35,7 @@ public class ChessPiece implements MouseListener{
         this.column = column;
         this.chessPieceList = pieceList;
 
-        if (identifier == 1) {
+        if (identifier == PAWN) {
             this.name = "Pawn";
             this.value = 1;
             if (color == WHITE) {
@@ -39,7 +45,7 @@ public class ChessPiece implements MouseListener{
                 this.pieceLabel = new JLabel(new ImageIcon("Pieces/BlackPawn.png"));
             }
         }
-        else if (identifier == 2) {
+        else if (identifier == KNIGHT) {
             this.name = "Knight";
             this.value = 3;
             if (color == WHITE) {
@@ -49,7 +55,7 @@ public class ChessPiece implements MouseListener{
                 this.pieceLabel = new JLabel(new ImageIcon("Pieces/BlackKnight.png"));
             }
         }
-        else if (identifier == 3) {
+        else if (identifier == BISHOP) {
             this.name = "Bishop";
             this.value = 3;
             if (color == WHITE) {
@@ -59,7 +65,7 @@ public class ChessPiece implements MouseListener{
                 this.pieceLabel = new JLabel(new ImageIcon("Pieces/BlackBishop.png"));
             }
         }
-        else if (identifier == 4) {
+        else if (identifier == ROOK) {
             this.name = "Rook";
             this.value = 5;
             if (color == WHITE) {
@@ -69,7 +75,7 @@ public class ChessPiece implements MouseListener{
                 this.pieceLabel = new JLabel(new ImageIcon("Pieces/BlackRook.png"));
             }
         }
-        else if (identifier == 5) {
+        else if (identifier == QUEEN) {
             this.name = "Queen";
             this.value = 9;
             if (color == WHITE) {
@@ -79,7 +85,7 @@ public class ChessPiece implements MouseListener{
                 this.pieceLabel = new JLabel(new ImageIcon("Pieces/BlackQueen.png"));
             }
         }
-        else if (identifier == 6) {
+        else if (identifier == KING) {
             this.name = "King";
             this.value = 99;
             if (color == WHITE) {
@@ -141,7 +147,7 @@ public class ChessPiece implements MouseListener{
         Main.resetTargetted(this.getBoardSquare().getBoard());
         Main.updateHighLight(chessPieceList, this);
         switch(identifier) {
-            case 1:
+            case PAWN:
                 if (color == WHITE) {
                     currentSquare.getBoard()[row - 1][column].setTargeted();
                     if (!hasMoved) {
@@ -154,7 +160,7 @@ public class ChessPiece implements MouseListener{
                     currentSquare.getBoard()[row + 2][column].setTargeted();
                 }
                 break;
-            case 2:
+            case KNIGHT:
                 for (int i = column - 2; i <= column + 2; i++) {
                     if (i < 0 || i > 7) {
                         continue;
@@ -180,7 +186,7 @@ public class ChessPiece implements MouseListener{
                     }
                 }
                 break;
-            case 3:
+            case BISHOP:
                 for (int i = 1; i < 8; i++) {
                     if (row + i == 8 || column + i == 8) {
                         break;
@@ -230,7 +236,7 @@ public class ChessPiece implements MouseListener{
                     currentSquare.getBoard()[row - i][column - i].setTargeted();
                 }
                 break;
-            case 4:
+            case ROOK:
                 for (int i = row + 1; i < 8; i++) {
                     if (currentSquare.getBoard()[i][column].hasPiece()) {
                         if (currentSquare.getBoard()[i][column].getPiece().getColor() == !this.color) {
@@ -268,7 +274,7 @@ public class ChessPiece implements MouseListener{
                     currentSquare.getBoard()[row][i].setTargeted();
                 }
                 break;
-            case 5:
+            case QUEEN:
                 for (int i = 1; i < 8; i++) {
                     if (row + i == 8 || column + i == 8) {
                         break;
