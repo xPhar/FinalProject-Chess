@@ -27,6 +27,16 @@ public class Main {
 
     private static ChessPiece selectedPiece;
 
+    private static BoardSquare[][] boardSquares;
+
+    private static ArrayList<ChessPiece> activePieces;
+
+    private static int moveCount = 1;
+
+    private static boolean colorToMove = ChessPiece.WHITE;
+
+    private static ChessPiece whiteKing;
+    private static ChessPiece blackKing;
 
 
 	/**
@@ -50,17 +60,17 @@ public class Main {
         board.setSize(800, 800);
         board.setLayout(new GridLayout(8, 8));
 
-        ArrayList<ChessPiece> activePieces = new ArrayList<ChessPiece>(32);
-        BoardSquare[][] boardSquares = new BoardSquare[8][];
+        activePieces = new ArrayList<ChessPiece>(32);
+        boardSquares = new BoardSquare[8][];
 
         for (int i = 0; i < 8; i++) {
             boardSquares[i] = new BoardSquare[8];
             for (int j = 0; j < 8; j++) {
                 if (i % 2 == 0 && j % 2 == 0 || i % 2 != 0 && j % 2 != 0) {
-                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0xEFEFD2), boardSquares);
+                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0xEFEFD2));
                 }
                 else {
-                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0x749454), boardSquares);
+                    boardSquares[i][j] = new BoardSquare(board, i, j, new Color(0x749454));
                 }
             }
         }
@@ -92,6 +102,36 @@ public class Main {
      * HELPER METHODS
      * Methods that you create to manage repetitive tasks.
      */
+
+    public static BoardSquare[][] getBoard() {
+        return boardSquares;
+    }
+
+    public static ArrayList<ChessPiece> getPieceList() {
+        return activePieces;
+    }
+
+    public static boolean getTurn() {
+        return colorToMove;
+    }
+
+    public static void toggleTurn() {
+        colorToMove = !colorToMove;
+    }
+
+    public static boolean whiteInCheck() {
+        if (whiteKing.getBoardSquare().isTargeted()) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean blackInCheck() {
+        if (blackKing.getBoardSquare().isTargeted()) {
+            return true;
+        }
+        return false;
+    }
     
     public static void resetBoard(BoardSquare[][] board, ArrayList<ChessPiece> pieceList) {
         for (int i = 0; i < 8; i++) {
@@ -110,23 +150,26 @@ public class Main {
                 row2 = 6;
             }
 
-            pieceList.add(board[row1][0].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][0], pieceList, row1, 0)));
-            pieceList.add(board[row1][1].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][1], pieceList, row1, 1)));
-            pieceList.add(board[row1][2].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][2], pieceList, row1, 2)));
-            pieceList.add(board[row1][3].setPiece(new ChessPiece(ChessPiece.QUEEN, color, board[row1][3], pieceList, row1, 3)));
-            pieceList.add(board[row1][4].setPiece(new ChessPiece(ChessPiece.KING, color, board[row1][4], pieceList, row1, 4)));
-            pieceList.add(board[row1][5].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][5], pieceList, row1, 5)));
-            pieceList.add(board[row1][6].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][6], pieceList, row1, 6)));
-            pieceList.add(board[row1][7].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][7], pieceList, row1, 7)));
+            pieceList.add(board[row1][0].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][0], row1, 0)));
+            pieceList.add(board[row1][1].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][1], row1, 1)));
+            pieceList.add(board[row1][2].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][2], row1, 2)));
+            pieceList.add(board[row1][3].setPiece(new ChessPiece(ChessPiece.QUEEN, color, board[row1][3], row1, 3)));
+            pieceList.add(board[row1][4].setPiece(new ChessPiece(ChessPiece.KING, color, board[row1][4], row1, 4)));
+            pieceList.add(board[row1][5].setPiece(new ChessPiece(ChessPiece.BISHOP, color, board[row1][5], row1, 5)));
+            pieceList.add(board[row1][6].setPiece(new ChessPiece(ChessPiece.KNIGHT, color, board[row1][6], row1, 6)));
+            pieceList.add(board[row1][7].setPiece(new ChessPiece(ChessPiece.ROOK, color, board[row1][7], row1, 7)));
 
-            // for (int j = 0; j < 8; j++) {
-            //     pieceList.add(board[row2][j].setPiece(new ChessPiece(ChessPiece.PAWN, color, board[row2][j], pieceList, row2, j)));
-            // }
+            for (int j = 0; j < 8; j++) {
+                pieceList.add(board[row2][j].setPiece(new ChessPiece(ChessPiece.PAWN, color, board[row2][j], row2, j)));
+            }
+
+            whiteKing = board[0][4].getPiece();
+            blackKing = board[7][4].getPiece();
         }
     }
 
-    public static void updateHighLight(ArrayList<ChessPiece> pieceList, ChessPiece newHighlighted) {
-        for (ChessPiece piece : pieceList) {
+    public static void updateHighLight(ChessPiece newHighlighted) {
+        for (ChessPiece piece : getPieceList()) {
             if (piece != newHighlighted) {
                 piece.getBoardSquare().removeHighlight();
             }
@@ -139,8 +182,8 @@ public class Main {
         return selectedPiece;
     }
 
-    public static void resetTargetted(BoardSquare[][] chessBoard) {
-        for (BoardSquare[] row : chessBoard) {
+    public static void resetTargetted() {
+        for (BoardSquare[] row : getBoard()) {
             for (BoardSquare square : row) {
                 square.removeHighlight();
             }
