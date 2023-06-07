@@ -335,6 +335,17 @@ public class BoardSquare implements MouseListener{
             getPiece().setBoardSquare(this);
             Main.resetTargetted();
             Main.toggleTurn();
+
+            if (this.getPiece().getColor() == ChessPiece.BLACK) {
+                if (Main.inCheck(Main.getBlackKing())) {
+                    System.out.println("THAT'S CHECK!");
+                }
+            }
+            else {
+                if (Main.inCheck(Main.getWhiteKing())) {
+                    System.out.println("THAT'S CHECK!");
+                }
+            }
         }
     }
 

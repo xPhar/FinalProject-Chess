@@ -1,7 +1,6 @@
 // Import the GUI libraries
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.util.ArrayList;
 
 public class Main {
@@ -119,16 +118,166 @@ public class Main {
         colorToMove = !colorToMove;
     }
 
-    public static boolean whiteInCheck() {
-        if (whiteKing.getBoardSquare().isTargeted()) {
-            return true;
+    public static boolean inCheck(ChessPiece king) {
+        boolean kingColor = king.getColor();
+        int kingxPos = king.getBoardSquare().getxPos();
+        int kingyPos = king.getBoardSquare().getyPos();
+        for (int i = kingxPos; i < 8; i++) {
+            if (!boardSquares[i][kingyPos].hasPiece()) {
+                continue;
+            }
+            ChessPiece piece = boardSquares[i][kingyPos].getPiece();
+            if (piece.getColor() != kingColor) {
+                if (piece.getIdentifier() == ChessPiece.ROOK || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    return true;
+                }
+            }
+            break;
         }
-        return false;
-    }
-
-    public static boolean blackInCheck() {
-        if (blackKing.getBoardSquare().isTargeted()) {
-            return true;
+        for (int i = kingxPos; i >= 0; i--) {
+            if (!boardSquares[i][kingyPos].hasPiece()) {
+                continue;
+            }
+            ChessPiece piece = boardSquares[i][kingyPos].getPiece();
+            if (piece.getColor() != kingColor) {
+                if (piece.getIdentifier() == ChessPiece.ROOK || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    return true;
+                }
+            }
+            break;
+        }
+        for (int i = kingyPos; i < 8; i++) {
+            if (!boardSquares[kingxPos][i].hasPiece()) {
+                continue;
+            }
+            ChessPiece piece = boardSquares[kingxPos][i].getPiece();
+            if (piece.getColor() != kingColor) {
+                if (piece.getIdentifier() == ChessPiece.ROOK || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    return true;
+                }
+            }
+            break;
+        }
+        for (int i = kingyPos; i >= 0; i--) {
+            if (!boardSquares[kingxPos][i].hasPiece()) {
+                continue;
+            }
+            ChessPiece piece = boardSquares[kingxPos][i].getPiece();
+            if (piece.getColor() != kingColor) {
+                if (piece.getIdentifier() == ChessPiece.ROOK || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    return true;
+                }
+            }
+            break;
+        }
+        for (int i = 1; i < 8; i++) {
+            if (kingxPos + i == 8 || kingyPos + i == 8) {
+                break;
+            }
+            if (getBoard()[kingxPos + i][kingyPos + i].hasPiece()) {
+                ChessPiece piece = getBoard()[kingxPos + i][kingyPos + i].getPiece();
+                if (piece.getIdentifier() == ChessPiece.BISHOP || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    if (piece.getColor() != kingColor) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        for (int i = 1; i < 8; i++) {
+            if (kingxPos + i == 8 || kingyPos - i == -1) {
+                break;
+            }
+            if (getBoard()[kingxPos + i][kingyPos - i].hasPiece()) {
+                ChessPiece piece = getBoard()[kingxPos + i][kingyPos - i].getPiece();
+                if (piece.getIdentifier() == ChessPiece.BISHOP || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    if (piece.getColor() != kingColor) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        for (int i = 1; i < 8; i++) {
+            if (kingxPos - i == -1 || kingyPos + i == 8) {
+                break;
+            }
+            if (getBoard()[kingxPos - i][kingyPos + i].hasPiece()) {
+                ChessPiece piece = getBoard()[kingxPos - i][kingyPos + i].getPiece();
+                if (piece.getIdentifier() == ChessPiece.BISHOP || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    if (piece.getColor() != kingColor) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        for (int i = 1; i < 8; i++) {
+            if (kingxPos - i == -1 || kingyPos - i == -1) {
+                break;
+            }
+            if (getBoard()[kingxPos - i][kingyPos - i].hasPiece()) {
+                ChessPiece piece = getBoard()[kingxPos - i][kingyPos - i].getPiece();
+                if (piece.getIdentifier() == ChessPiece.BISHOP || piece.getIdentifier() == ChessPiece.QUEEN) {
+                    if (piece.getColor() != kingColor) {
+                        return true;
+                    }
+                }
+                break;
+            }
+        }
+        for (int i = kingyPos - 2; i <= kingyPos + 2; i++) {
+            if (i < 0 || i > 7 || i == kingyPos) {
+                continue;
+            }
+            if (i == kingyPos + 2 || i == kingyPos - 2) {
+                if (kingxPos + 1 < 8 && getBoard()[kingxPos + 1][i].hasPiece() && getBoard()[kingxPos + 1][i].getPiece().getColor() != king.getColor()) {
+                    return true;
+                }
+                if (kingxPos - 1 >= 0 && getBoard()[kingxPos - 1][i].hasPiece() && getBoard()[kingxPos - 1][i].getPiece().getColor() != king.getColor()) {
+                    return true;
+                }
+            }
+            else {
+                if (kingxPos + 2 < 8 && getBoard()[kingxPos + 2][i].hasPiece() && getBoard()[kingxPos + 2][i].getPiece().getColor() != king.getColor()) {
+                    return true;
+                }
+                if (kingxPos - 2 >= 0 && getBoard()[kingxPos - 2][i].hasPiece() && getBoard()[kingxPos - 2][i].getPiece().getColor() != king.getColor()) {
+                    return true;
+                }
+            }
+        }
+        if (kingColor == ChessPiece.WHITE) {
+            if (getBoard()[kingxPos - 1][kingyPos - 1].hasPiece()) {
+                if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                    if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getColor() != kingColor) {
+                        return true;
+                    }
+                }
+            }
+            if (getBoard()[kingxPos - 1][kingyPos + 1].hasPiece()) {
+                if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                    if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getColor() != kingColor) {
+                        return true;
+                    }
+                }
+            }
+        }
+        if (kingColor == ChessPiece.BLACK) {
+            if (getBoard()[kingxPos + 1][kingyPos + 1].hasPiece()) {
+                if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                    if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getColor() != kingColor) {
+                        return true;
+                    }
+                }
+            }
+            if (getBoard()[kingxPos + 1][kingyPos - 1].hasPiece()) {
+                if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                    if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getColor() != kingColor) {
+                        return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -188,6 +337,14 @@ public class Main {
                 square.removeHighlight();
             }
         }
+    }
+
+    public static ChessPiece getBlackKing() {
+        return blackKing;
+    }
+
+    public static ChessPiece getWhiteKing() {
+        return whiteKing;
     }
 
     /**
