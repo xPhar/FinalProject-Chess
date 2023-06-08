@@ -227,6 +227,7 @@ public class Main {
             }
         }
         for (int i = kingyPos - 2; i <= kingyPos + 2; i++) {
+            BoardSquare[][] newboardlol = getBoard(); // TODO: DELETE AFTER FIGURING OUT ISSUES
             if (i < 0 || i > 7 || i == kingyPos) {
                 continue;
             }
@@ -248,33 +249,41 @@ public class Main {
             }
         }
         if (kingColor == ChessPiece.WHITE) {
-            if (getBoard()[kingxPos - 1][kingyPos - 1].hasPiece()) {
-                if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
-                    if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getColor() != kingColor) {
-                        return true;
+            if (kingxPos - 1 >= 0 && kingxPos - 1 >= 0) {
+                if (getBoard()[kingxPos - 1][kingyPos - 1].hasPiece()) {
+                    if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                        if (getBoard()[kingxPos - 1][kingyPos - 1].getPiece().getColor() != kingColor) {
+                            return true;
+                        }
                     }
                 }
             }
-            if (getBoard()[kingxPos - 1][kingyPos + 1].hasPiece()) {
-                if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
-                    if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getColor() != kingColor) {
-                        return true;
+            if (kingxPos - 1 >= 0 && kingyPos + 1 < 8) {
+                if (getBoard()[kingxPos - 1][kingyPos + 1].hasPiece()) {
+                    if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                        if (getBoard()[kingxPos - 1][kingyPos + 1].getPiece().getColor() != kingColor) {
+                            return true;
+                        }
                     }
                 }
             }
         }
         if (kingColor == ChessPiece.BLACK) {
-            if (getBoard()[kingxPos + 1][kingyPos + 1].hasPiece()) {
-                if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
-                    if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getColor() != kingColor) {
-                        return true;
+            if (kingxPos + 1 < 8 && kingyPos + 1 < 8) {
+                if (getBoard()[kingxPos + 1][kingyPos + 1].hasPiece()) {
+                    if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                        if (getBoard()[kingxPos + 1][kingyPos + 1].getPiece().getColor() != kingColor) {
+                            return true;
+                        }
                     }
                 }
             }
-            if (getBoard()[kingxPos + 1][kingyPos - 1].hasPiece()) {
-                if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
-                    if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getColor() != kingColor) {
-                        return true;
+            if (kingxPos + 1 < 8 && kingyPos - 1 >= 0) {
+                if (getBoard()[kingxPos + 1][kingyPos - 1].hasPiece()) {
+                    if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getIdentifier() == ChessPiece.PAWN) {
+                        if (getBoard()[kingxPos + 1][kingyPos - 1].getPiece().getColor() != kingColor) {
+                            return true;
+                        }
                     }
                 }
             }
@@ -337,6 +346,7 @@ public class Main {
                 square.removeHighlight();
             }
         }
+        selectedPiece = null;
     }
 
     public static ChessPiece getBlackKing() {
