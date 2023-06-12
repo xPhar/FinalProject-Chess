@@ -1,7 +1,9 @@
 // Import the GUI libraries
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.text.DecimalFormat;
 
 public class Main {
 	/**
@@ -36,6 +38,9 @@ public class Main {
 
     private static ChessPiece whiteKing;
     private static ChessPiece blackKing;
+
+    private static int whiteTimer = 600;
+    private static int blackTimer = 600;
 
 
 	/**
@@ -81,6 +86,37 @@ public class Main {
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.PAGE_AXIS));
         sidebar.setPreferredSize(new Dimension(200, 800));
         sidebar.setBackground(new Color(0x1E1E25));
+
+        Font labelFont = new Font("/Fonts/Lato-Bold.ttf", Font.BOLD, 24);
+        DecimalFormat formatter = new DecimalFormat("0:00.00");
+        
+
+        sidebar.add(Box.createRigidArea(new Dimension(200, 20)));
+
+        // TODO: Make Icons
+        JLabel blackPlayerLabel = new JLabel("Black");
+        blackPlayerLabel.setFont(labelFont);
+        blackPlayerLabel.setForeground(Color.WHITE);
+        blackPlayerLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        sidebar.add(blackPlayerLabel);
+
+        sidebar.add(Box.createRigidArea(new Dimension(200, 10)));
+
+        // TEMP
+        JLabel blackTimeLabel = new JLabel("00:00");
+        blackTimeLabel.setBackground(new Color(0x202020));
+        blackTimeLabel.setForeground(new Color(0xF0F0F0));
+        blackTimeLabel.setOpaque(false); //TODO
+        blackTimeLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        sidebar.add(blackTimeLabel);
+
+        sidebar.add(Box.createRigidArea(new Dimension(200, 50)));
+
+        JLabel whitePlayerLabel = new JLabel("White");
+        whitePlayerLabel.setFont(labelFont);
+        whitePlayerLabel.setForeground(Color.WHITE);
+        whitePlayerLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        sidebar.add(whitePlayerLabel);
 
         contentPane.add(sidebar, BorderLayout.EAST);
 
@@ -227,7 +263,6 @@ public class Main {
             }
         }
         for (int i = kingyPos - 2; i <= kingyPos + 2; i++) {
-            BoardSquare[][] newboardlol = getBoard(); // TODO: DELETE AFTER FIGURING OUT ISSUES
             if (i < 0 || i > 7 || i == kingyPos) {
                 continue;
             }
@@ -362,5 +397,16 @@ public class Main {
      * Subclasses that handle events (button clicks, mouse clicks and moves,
      * key presses, timer expirations)
      */
+
+
+    // TODO: timer v confusing fk
+    private static class TimerTick extends AbstractAction {
+        public void actionPerformed(ActionEvent event) {
+            blackTimer--;
+            if (blackTimer == 0) {
+                // TODO: endGame(black) <-- Black loses game
+            }
+        }
+    }
 
 }
