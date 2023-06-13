@@ -88,6 +88,7 @@ public class Main {
         sidebar.setBackground(new Color(0x1E1E25));
 
         Font labelFont = new Font("/Fonts/Lato-Bold.ttf", Font.BOLD, 24);
+        Font timerFont = new Font("Oswald-Bold.ttf", Font.BOLD, 30);
         DecimalFormat formatter = new DecimalFormat("0:00.00");
         
 
@@ -102,12 +103,12 @@ public class Main {
 
         sidebar.add(Box.createRigidArea(new Dimension(200, 10)));
 
-        // TEMP
         JLabel blackTimeLabel = new JLabel("00:00");
-        blackTimeLabel.setBackground(new Color(0x202020));
+        blackTimeLabel.setBackground(new Color(0x000000));
         blackTimeLabel.setForeground(new Color(0xF0F0F0));
-        blackTimeLabel.setOpaque(false); //TODO
+        blackTimeLabel.setOpaque(true);
         blackTimeLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        blackTimeLabel.setFont(timerFont);
         sidebar.add(blackTimeLabel);
 
         sidebar.add(Box.createRigidArea(new Dimension(200, 50)));
@@ -407,7 +408,6 @@ public class Main {
      */
 
 
-    // TODO: timer v confusing fk
     private static class TimerTick extends AbstractAction {
         public void actionPerformed(ActionEvent event) {
             blackTimer--;
@@ -416,5 +416,7 @@ public class Main {
             }
         }
     }
+
+
 
 }

@@ -1,12 +1,12 @@
 Project Task List:
 
 CURRENT FOCUS:
-set highlighting squares to not display if move causes check
-see BoardSquare TODO for next thing
+Make timers work
+(using awt event which fires every x fraction of a second)
 
 Next Up:
-Checks/Checkmat
-Timers
+En Passant
+Checkmate
 Castling
 Settings
 PGN

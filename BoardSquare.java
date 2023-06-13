@@ -569,11 +569,56 @@ public class BoardSquare implements MouseListener{
             return;
         }
         if (this.isTargeted) {
+            if (Main.getSelectedPiece().getIdentifier() == ChessPiece.KING && this.hasPiece() && this.getPiece().getIdentifier() == ChessPiece.ROOK) {
+                if (Main.getSelectedPiece().getColor() == this.getPiece().getColor()) {
+                    int kingxPos = Main.getSelectedPiece().getBoardSquare().getxPos();
+                    int kingyPos = Main.getSelectedPiece().getBoardSquare().getyPos();
+                    BoardSquare kingNewSquare;
+                    BoardSquare rookNewSquare;
+                    if (kingyPos < this.getyPos()) {
+                        kingNewSquare = Main.getBoard()[kingxPos][kingyPos + 2];
+                        rookNewSquare = Main.getBoard()[kingxPos][kingyPos + 1];
+                    }
+                    else {
+                        kingNewSquare = Main.getBoard()[kingxPos][kingyPos - 2];
+                        rookNewSquare = Main.getBoard()[kingxPos][kingyPos - 1];
+                    }
+
+                    Main.getSelectedPiece().getBoardSquare().removePiece();
+                    kingNewSquare.setPiece(Main.getSelectedPiece());
+                    Main.getSelectedPiece().setBoardSquare(kingNewSquare);
+                    Main.getSelectedPiece().pieceMoved();
+                    rookNewSquare.setPiece(this.getPiece());
+                    getPiece().setBoardSquare(rookNewSquare);
+                    removePiece();
+
+                    // Update square to ensure piece remains visible
+                    kingNewSquare.setHighlighed();
+                    kingNewSquare.removeHighlight();
+
+                    Main.resetTargetted();
+                    Main.toggleTurn();
+
+                    if (rookNewSquare.getPiece().getColor() == ChessPiece.BLACK) {
+                        if (Main.inCheck(Main.getBlackKing())) {
+                            System.out.println("BLACK'S IN CHECK!");
+                        }
+                    }
+                    else {
+                        if (Main.inCheck(Main.getWhiteKing())) {
+                            System.out.println("WHITE'S IN CHECK!");
+                        }
+                    }
+                    return;
+                }
+            }
+
             Main.getSelectedPiece().getBoardSquare().removePiece();
             removePiece();
             this.setPiece(Main.getSelectedPiece());
             getPiece().setBoardSquare(this);
             getPiece().pieceMoved();
+            
             Main.resetTargetted();
             Main.toggleTurn();
 
