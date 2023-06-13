@@ -90,25 +90,31 @@ public class BoardSquare implements MouseListener{
                         if (Main.getBoard()[xPos - 1][yPos].hasPiece()) {
                             break;
                         }
-                        if (!Main.getBoard()[xPos - 1][yPos].hasPiece()) {
+                        else {
                             Main.getBoard()[xPos - 1][yPos].setTargeted();
                         }
                         if (!getPiece().pieceHasMoved() && !Main.getBoard()[xPos - 2][yPos].hasPiece()) {
                             Main.getBoard()[xPos - 2][yPos].setTargeted();
                         }
-                        break;
                     }
-                    if (yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].hasPiece() && Main.getBoard()[xPos + 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                        Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
-                    }
-                    if (yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].hasPiece() && Main.getBoard()[xPos + 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                        Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
-                    }
-                    if (!Main.getBoard()[xPos + 1][yPos].hasPiece()) {
-                        Main.getBoard()[xPos + 1][yPos].setTargeted();
-                    }
-                    if (!getPiece().pieceHasMoved() && !Main.getBoard()[xPos + 2][yPos].hasPiece()) {
-                        Main.getBoard()[xPos + 2][yPos].setTargeted();
+                    else {
+                        if (yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].hasPiece() && Main.getBoard()[xPos + 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
+                            Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                        }
+                        if (yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].hasPiece() && Main.getBoard()[xPos + 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
+                            Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                        }
+                        if (Main.getBoard()[xPos + 1][yPos].hasPiece()) {
+                            break;
+                        }
+                        else {
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos])) {
+                                Main.getBoard()[xPos + 1][yPos].setTargeted();
+                            }
+                        }
+                        if (!getPiece().pieceHasMoved() && !Main.getBoard()[xPos + 2][yPos].hasPiece()) {
+                            Main.getBoard()[xPos + 2][yPos].setTargeted();
+                        }
                     }
                     break;
                 case ChessPiece.KNIGHT:
@@ -406,17 +412,17 @@ public class BoardSquare implements MouseListener{
         return isTargeted;
     }
 
-    public boolean moveCausesCheck() {
-        // TODO: This needs to work STATICLY, no using main.getselectedpiece, instead pass in board square and piece or smthn
+    public static boolean moveCausesCheck(ChessPiece movingPiece, BoardSquare squareToCheck) {
+        // TODO: WHAT HAPPENING
         boolean movePossible = true;
-        ChessPiece movingPiece = Main.getSelectedPiece();
         BoardSquare prevBoardSquare = movingPiece.getBoardSquare();
         ChessPiece removedPiece = null;
-        if (this.hasPiece()) {
-            removedPiece = this.getPiece();
+        if (squareToCheck.hasPiece()) {
+            removedPiece = squareToCheck.getPiece();
         }
-        this.setPiece(Main.getSelectedPiece());
-        getPiece().setBoardSquare(this);
+        squareToCheck.setPiece(movingPiece);
+        movingPiece.setBoardSquare(squareToCheck);
+        prevBoardSquare.removePiece();
         if (movingPiece.getColor() == ChessPiece.WHITE) {
             if (Main.inCheck(Main.getWhiteKing())) {
                 movePossible = false;
@@ -428,8 +434,9 @@ public class BoardSquare implements MouseListener{
             }
         }
         if (removedPiece != null) {
-            this.setPiece(removedPiece);
+            squareToCheck.setPiece(removedPiece);
         }
+        prevBoardSquare.setPiece(movingPiece);
         movingPiece.setBoardSquare(prevBoardSquare);
         return movePossible;
     }
