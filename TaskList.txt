@@ -1,13 +1,12 @@
 Project Task List:
 
 CURRENT FOCUS:
-FIX ISSUES WITH CHECK CONDITIONS (DEBUG)
+set highlighting squares to not display if move causes check
+see BoardSquare TODO for next thing
 
 Next Up:
-Piece Movement
-Capturing
+Checks/Checkmat
 Timers
-Checks/Checkmate
 Castling
 Settings
 PGN

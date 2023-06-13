@@ -122,7 +122,7 @@ public class Main {
         boolean kingColor = king.getColor();
         int kingxPos = king.getBoardSquare().getxPos();
         int kingyPos = king.getBoardSquare().getyPos();
-        for (int i = kingxPos; i < 8; i++) {
+        for (int i = kingxPos + 1; i < 8; i++) {
             if (!boardSquares[i][kingyPos].hasPiece()) {
                 continue;
             }
@@ -134,7 +134,7 @@ public class Main {
             }
             break;
         }
-        for (int i = kingxPos; i >= 0; i--) {
+        for (int i = kingxPos - 1; i >= 0; i--) {
             if (!boardSquares[i][kingyPos].hasPiece()) {
                 continue;
             }
@@ -146,7 +146,7 @@ public class Main {
             }
             break;
         }
-        for (int i = kingyPos; i < 8; i++) {
+        for (int i = kingyPos + 1; i < 8; i++) {
             if (!boardSquares[kingxPos][i].hasPiece()) {
                 continue;
             }
@@ -158,7 +158,7 @@ public class Main {
             }
             break;
         }
-        for (int i = kingyPos; i >= 0; i--) {
+        for (int i = kingyPos - 1; i >= 0; i--) {
             if (!boardSquares[kingxPos][i].hasPiece()) {
                 continue;
             }
@@ -232,19 +232,27 @@ public class Main {
                 continue;
             }
             if (i == kingyPos + 2 || i == kingyPos - 2) {
-                if (kingxPos + 1 < 8 && getBoard()[kingxPos + 1][i].hasPiece() && getBoard()[kingxPos + 1][i].getPiece().getColor() != king.getColor()) {
-                    return true;
+                if (kingxPos + 1 < 8 && getBoard()[kingxPos + 1][i].hasPiece() && getBoard()[kingxPos + 1][i].getPiece().getIdentifier() == ChessPiece.KNIGHT) {
+                    if (getBoard()[kingxPos + 1][i].getPiece().getColor() != king.getColor()) {
+                        return true;
+                    }
                 }
-                if (kingxPos - 1 >= 0 && getBoard()[kingxPos - 1][i].hasPiece() && getBoard()[kingxPos - 1][i].getPiece().getColor() != king.getColor()) {
-                    return true;
+                if (kingxPos - 1 >= 0 && getBoard()[kingxPos - 1][i].hasPiece() && getBoard()[kingxPos - 1][i].getPiece().getIdentifier() == ChessPiece.KNIGHT) {
+                    if (getBoard()[kingxPos - 1][i].getPiece().getColor() != king.getColor()) {
+                        return true;
+                    }
                 }
             }
             else {
-                if (kingxPos + 2 < 8 && getBoard()[kingxPos + 2][i].hasPiece() && getBoard()[kingxPos + 2][i].getPiece().getColor() != king.getColor()) {
-                    return true;
+                if (kingxPos + 2 < 8 && getBoard()[kingxPos + 2][i].hasPiece() && getBoard()[kingxPos + 2][i].getPiece().getIdentifier() == ChessPiece.KNIGHT) {
+                    if (getBoard()[kingxPos + 2][i].getPiece().getColor() != king.getColor()) {
+                        return true;
+                    }
                 }
-                if (kingxPos - 2 >= 0 && getBoard()[kingxPos - 2][i].hasPiece() && getBoard()[kingxPos - 2][i].getPiece().getColor() != king.getColor()) {
-                    return true;
+                if (kingxPos - 2 >= 0 && getBoard()[kingxPos - 2][i].hasPiece() && getBoard()[kingxPos - 2][i].getPiece().getIdentifier() == ChessPiece.KNIGHT) {
+                    if (getBoard()[kingxPos - 2][i].getPiece().getColor() != king.getColor()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -321,8 +329,8 @@ public class Main {
                 pieceList.add(board[row2][j].setPiece(new ChessPiece(ChessPiece.PAWN, color, board[row2][j], row2, j)));
             }
 
-            whiteKing = board[0][4].getPiece();
-            blackKing = board[7][4].getPiece();
+            whiteKing = board[7][4].getPiece();
+            blackKing = board[0][4].getPiece();
         }
     }
 

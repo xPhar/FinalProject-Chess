@@ -29,6 +29,7 @@ public class BoardSquare implements MouseListener{
     }
 
     public ChessPiece setPiece(ChessPiece piece) {
+        removePiece();
         this.piece = piece;
         panel.add(piece.getLabel());
         return this.piece;
@@ -403,6 +404,34 @@ public class BoardSquare implements MouseListener{
 
     public boolean isTargeted() {
         return isTargeted;
+    }
+
+    public boolean moveCausesCheck() {
+        // TODO: This needs to work STATICLY, no using main.getselectedpiece, instead pass in board square and piece or smthn
+        boolean movePossible = true;
+        ChessPiece movingPiece = Main.getSelectedPiece();
+        BoardSquare prevBoardSquare = movingPiece.getBoardSquare();
+        ChessPiece removedPiece = null;
+        if (this.hasPiece()) {
+            removedPiece = this.getPiece();
+        }
+        this.setPiece(Main.getSelectedPiece());
+        getPiece().setBoardSquare(this);
+        if (movingPiece.getColor() == ChessPiece.WHITE) {
+            if (Main.inCheck(Main.getWhiteKing())) {
+                movePossible = false;
+            }
+        }
+        else {
+            if (Main.inCheck(Main.getBlackKing())) {
+                movePossible = false;
+            }
+        }
+        if (removedPiece != null) {
+            this.setPiece(removedPiece);
+        }
+        movingPiece.setBoardSquare(prevBoardSquare);
+        return movePossible;
     }
 
     public void mouseClicked(MouseEvent e) {
