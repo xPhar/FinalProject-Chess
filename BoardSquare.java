@@ -82,27 +82,39 @@ public class BoardSquare implements MouseListener{
                 case ChessPiece.PAWN:
                     if (getPiece().getColor() == ChessPiece.WHITE) {
                         if (yPos - 1 >= 0 && Main.getBoard()[xPos - 1][yPos - 1].hasPiece() && Main.getBoard()[xPos - 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                            Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos - 1])) {
+                                Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                            }
                         }
                         if (yPos + 1 < 8 && Main.getBoard()[xPos - 1][yPos + 1].hasPiece() && Main.getBoard()[xPos - 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                            Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos + 1])) {
+                                Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                            }
                         }
                         if (Main.getBoard()[xPos - 1][yPos].hasPiece()) {
                             break;
                         }
                         else {
-                            Main.getBoard()[xPos - 1][yPos].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos])) {
+                                Main.getBoard()[xPos - 1][yPos].setTargeted();
+                            }
                         }
                         if (!getPiece().pieceHasMoved() && !Main.getBoard()[xPos - 2][yPos].hasPiece()) {
-                            Main.getBoard()[xPos - 2][yPos].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 2][yPos])) {
+                                Main.getBoard()[xPos - 2][yPos].setTargeted();
+                            }
                         }
                     }
                     else {
                         if (yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].hasPiece() && Main.getBoard()[xPos + 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                            Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos - 1])) {
+                                Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                            }
                         }
                         if (yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].hasPiece() && Main.getBoard()[xPos + 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                            Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos + 1])) {
+                                Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                            }
                         }
                         if (Main.getBoard()[xPos + 1][yPos].hasPiece()) {
                             break;
@@ -113,7 +125,9 @@ public class BoardSquare implements MouseListener{
                             }
                         }
                         if (!getPiece().pieceHasMoved() && !Main.getBoard()[xPos + 2][yPos].hasPiece()) {
-                            Main.getBoard()[xPos + 2][yPos].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 2][yPos])) {
+                                Main.getBoard()[xPos + 2][yPos].setTargeted();
+                            }
                         }
                     }
                     break;
@@ -127,18 +141,26 @@ public class BoardSquare implements MouseListener{
                         }
                         if (i == yPos + 2 || i == yPos - 2) {
                             if (xPos + 1 < 8 && (!Main.getBoard()[xPos + 1][i].hasPiece() || Main.getBoard()[xPos + 1][i].getPiece().getColor() != getPiece().getColor())) {
-                                Main.getBoard()[xPos + 1][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][i])) {
+                                    Main.getBoard()[xPos + 1][i].setTargeted();
+                                }
                             }
                             if (xPos - 1 >= 0 && (!Main.getBoard()[xPos - 1][i].hasPiece() ||Main.getBoard()[xPos - 1][i].getPiece().getColor() != getPiece().getColor())) {
-                                Main.getBoard()[xPos - 1][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][i])) {
+                                    Main.getBoard()[xPos - 1][i].setTargeted();
+                                }
                             }
                         }
                         else {
                             if (xPos + 2 < 8 &&(!Main.getBoard()[xPos + 2][i].hasPiece() || Main.getBoard()[xPos + 2][i].getPiece().getColor() != getPiece().getColor())) {
-                            Main.getBoard()[xPos + 2][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 2][i])) {
+                                    Main.getBoard()[xPos + 2][i].setTargeted();
+                                }
                             }
                             if (xPos - 2 >= 0 &&(!Main.getBoard()[xPos - 2][i].hasPiece() || Main.getBoard()[xPos - 2][i].getPiece().getColor() != getPiece().getColor())) {
-                                Main.getBoard()[xPos - 2][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 2][i])) {
+                                    Main.getBoard()[xPos - 2][i].setTargeted();
+                                }
                             }
                         }
                     }
@@ -150,11 +172,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos + i][yPos + i].hasPiece()) {
                             if (Main.getBoard()[xPos + i][yPos + i].getPiece().getColor()!= getPiece().getColor()) {
-                                Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos + i])) {
+                                    Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos + i])) {
+                            Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos + i == 8 || yPos - i < 0) {
@@ -162,11 +188,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos + i][yPos - i].hasPiece()) {
                             if (Main.getBoard()[xPos + i][yPos - i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos - i])) {
+                                    Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos - i])) {
+                            Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos - i < 0 || yPos + i == 8) {
@@ -174,11 +204,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos - i][yPos + i].hasPiece()) {
                             if (Main.getBoard()[xPos - i][yPos + i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos + i])) {
+                                    Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos + i])) {
+                            Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos - i < 0|| yPos - i < 0) {
@@ -186,49 +220,69 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos - i][yPos - i].hasPiece()) {
                             if (Main.getBoard()[xPos - i][yPos - i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos - i])) {
+                                    Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos - i])) {
+                            Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                        }
                     }
                     break;
                 case ChessPiece.ROOK:
                     for (int i = xPos + 1; i < 8; i++) {
                         if (Main.getBoard()[i][yPos].hasPiece()) {
                             if (Main.getBoard()[i][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[i][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                                    Main.getBoard()[i][yPos].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[i][yPos].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                            Main.getBoard()[i][yPos].setTargeted();
+                        }
                     }
                     for (int i = xPos - 1; i >= 0; i--) {
                         if (Main.getBoard()[i][yPos].hasPiece()) {
                             if (Main.getBoard()[i][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[i][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                                    Main.getBoard()[i][yPos].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[i][yPos].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                            Main.getBoard()[i][yPos].setTargeted();
+                        }
                     }
                     for (int i = yPos + 1; i < 8; i++) {
                         if (Main.getBoard()[xPos][i].hasPiece()) {
                             if (Main.getBoard()[xPos][i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                                    Main.getBoard()[xPos][i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos][i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                            Main.getBoard()[xPos][i].setTargeted();
+                        }
                     }
                     for (int i = yPos - 1; i >= 0; i--) {
                         if (Main.getBoard()[xPos][i].hasPiece()) {
                             if (Main.getBoard()[xPos][i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                                    Main.getBoard()[xPos][i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos][i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                            Main.getBoard()[xPos][i].setTargeted();
+                        }
                     }
                     break;
                 case ChessPiece.QUEEN:
@@ -238,11 +292,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos + i][yPos + i].hasPiece()) {
                             if (Main.getBoard()[xPos + i][yPos + i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos + i])) {
+                                    Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos + i])) {
+                            Main.getBoard()[xPos + i][yPos + i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos + i == 8 || yPos - i < 0) {
@@ -250,11 +308,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos + i][yPos - i].hasPiece()) {
                             if (Main.getBoard()[xPos + i][yPos - i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos - i])) {
+                                    Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + i][yPos - i])) {
+                            Main.getBoard()[xPos + i][yPos - i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos - i < 0 || yPos + i == 8) {
@@ -262,11 +324,15 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos - i][yPos + i].hasPiece()) {
                             if (Main.getBoard()[xPos - i][yPos + i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos + i])) {
+                                    Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos + i])) {
+                            Main.getBoard()[xPos - i][yPos + i].setTargeted();
+                        }
                     }
                     for (int i = 1; i < 8; i++) {
                         if (xPos - i < 0 || yPos - i < 0) {
@@ -274,47 +340,67 @@ public class BoardSquare implements MouseListener{
                         }
                         if (Main.getBoard()[xPos - i][yPos - i].hasPiece()) {
                             if (Main.getBoard()[xPos - i][yPos - i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos - i])) {
+                                    Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - i][yPos - i])) {
+                            Main.getBoard()[xPos - i][yPos - i].setTargeted();
+                        }
                     }
                     for (int i = xPos + 1; i < 8; i++) {
                         if (Main.getBoard()[i][yPos].hasPiece()) {
                             if (Main.getBoard()[i][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[i][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                                    Main.getBoard()[i][yPos].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[i][yPos].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                            Main.getBoard()[i][yPos].setTargeted();
+                        }
                     }
                     for (int i = xPos - 1; i >= 0; i--) {
                         if (Main.getBoard()[i][yPos].hasPiece()) {
                             if (Main.getBoard()[i][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[i][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                                    Main.getBoard()[i][yPos].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[i][yPos].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[i][yPos])) {
+                            Main.getBoard()[i][yPos].setTargeted();
+                        }
                     }
                     for (int i = yPos + 1; i < 8; i++) {
                         if (Main.getBoard()[xPos][i].hasPiece()) {
                             if (Main.getBoard()[xPos][i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                                    Main.getBoard()[xPos][i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos][i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                            Main.getBoard()[xPos][i].setTargeted();
+                        }
                     }
                     for (int i = yPos - 1; i >= 0; i--) {
                         if (Main.getBoard()[xPos][i].hasPiece()) {
                             if (Main.getBoard()[xPos][i].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][i].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                                    Main.getBoard()[xPos][i].setTargeted();
+                                }
                             }
                             break;
                         }
-                        Main.getBoard()[xPos][i].setTargeted();
+                        if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][i])) {
+                            Main.getBoard()[xPos][i].setTargeted();
+                        }
                     }
                     break;
                 case ChessPiece.KING:
@@ -326,81 +412,113 @@ public class BoardSquare implements MouseListener{
                     if (xPos - 1 >= 0) {
                         if (Main.getBoard()[xPos - 1][yPos].hasPiece()) {
                             if (Main.getBoard()[xPos - 1][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - 1][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos])) {
+                                    Main.getBoard()[xPos - 1][yPos].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos - 1][yPos].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos])) {
+                                Main.getBoard()[xPos - 1][yPos].setTargeted();
+                            }
                         }
                     }
                     if (xPos - 1 >= 0 && yPos - 1 >= 0) {
                         if (Main.getBoard()[xPos - 1][yPos - 1].hasPiece()) {
                             if (Main.getBoard()[xPos - 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos - 1])) {
+                                    Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos - 1])) {
+                                Main.getBoard()[xPos - 1][yPos - 1].setTargeted();
+                            }
                         }
                     }
                     if (yPos - 1 >= 0) {
                         if (Main.getBoard()[xPos][yPos - 1].hasPiece()) {
                             if (Main.getBoard()[xPos][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][yPos - 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][yPos - 1])) {
+                                    Main.getBoard()[xPos][yPos - 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos][yPos - 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][yPos - 1])) {
+                                Main.getBoard()[xPos][yPos - 1].setTargeted();
+                            }
                         }
                     }
                     if (xPos + 1 < 8 && yPos - 1 >= 0) {
                         if (Main.getBoard()[xPos + 1][yPos - 1].hasPiece()) {
                             if (Main.getBoard()[xPos + 1][yPos - 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos - 1])) {
+                                    Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos - 1])) {
+                                Main.getBoard()[xPos + 1][yPos - 1].setTargeted();
+                            }
                         }
                     }
                     if (xPos + 1 < 8) {
                         if (Main.getBoard()[xPos + 1][yPos].hasPiece()) {
                             if (Main.getBoard()[xPos + 1][yPos].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + 1][yPos].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos])) {
+                                    Main.getBoard()[xPos + 1][yPos].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos + 1][yPos].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos])) {
+                                Main.getBoard()[xPos + 1][yPos].setTargeted();
+                            }
                         }
                     }
                     if (xPos + 1 < 8 && yPos + 1 < 8) {
                         if (Main.getBoard()[xPos + 1][yPos + 1].hasPiece()) {
                             if (Main.getBoard()[xPos + 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos + 1])) {
+                                    Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos + 1][yPos + 1])) {
+                                Main.getBoard()[xPos + 1][yPos + 1].setTargeted();
+                            }
                         }
                     }
                     if (yPos + 1 < 8) {
                         if (Main.getBoard()[xPos][yPos + 1].hasPiece()) {
                             if (Main.getBoard()[xPos][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos][yPos + 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][yPos + 1])) {
+                                    Main.getBoard()[xPos][yPos + 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos][yPos + 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos][yPos + 1])) {
+                                Main.getBoard()[xPos][yPos + 1].setTargeted();
+                            }
                         }
                     }
                     if (xPos - 1 >= 0 && yPos + 1 < 8) {
                         if (Main.getBoard()[xPos - 1][yPos + 1].hasPiece()) {
                             if (Main.getBoard()[xPos - 1][yPos + 1].getPiece().getColor() != getPiece().getColor()) {
-                                Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                                if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos + 1])) {
+                                    Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                                }
                             }
                         }
                         else {
-                            Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                            if (!moveCausesCheck(getPiece(), Main.getBoard()[xPos - 1][yPos + 1])) {
+                                Main.getBoard()[xPos - 1][yPos + 1].setTargeted();
+                            }
                         }
                     }
                     break;
@@ -413,8 +531,7 @@ public class BoardSquare implements MouseListener{
     }
 
     public static boolean moveCausesCheck(ChessPiece movingPiece, BoardSquare squareToCheck) {
-        // TODO: WHAT HAPPENING
-        boolean movePossible = true;
+        boolean moveCausesCheck = false;
         BoardSquare prevBoardSquare = movingPiece.getBoardSquare();
         ChessPiece removedPiece = null;
         if (squareToCheck.hasPiece()) {
@@ -425,20 +542,23 @@ public class BoardSquare implements MouseListener{
         prevBoardSquare.removePiece();
         if (movingPiece.getColor() == ChessPiece.WHITE) {
             if (Main.inCheck(Main.getWhiteKing())) {
-                movePossible = false;
+                moveCausesCheck = true;
             }
         }
         else {
             if (Main.inCheck(Main.getBlackKing())) {
-                movePossible = false;
+                moveCausesCheck = true;
             }
         }
         if (removedPiece != null) {
             squareToCheck.setPiece(removedPiece);
         }
+        else {
+            squareToCheck.removePiece();
+        }
         prevBoardSquare.setPiece(movingPiece);
         movingPiece.setBoardSquare(prevBoardSquare);
-        return movePossible;
+        return moveCausesCheck;
     }
 
     public void mouseClicked(MouseEvent e) {
