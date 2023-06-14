@@ -1,8 +1,6 @@
 Project Task List:
 
 CURRENT FOCUS:
-Make timers work
-(using awt event which fires every x fraction of a second)
 
 Next Up:
 En Passant

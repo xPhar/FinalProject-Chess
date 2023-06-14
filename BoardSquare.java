@@ -599,17 +599,16 @@ public class BoardSquare implements MouseListener{
                     Main.resetTargetted();
                     Main.toggleTurn();
 
-                    if (rookNewSquare.getPiece().getColor() == ChessPiece.BLACK) {
-                        if (Main.inCheck(Main.getBlackKing())) {
-                            System.out.println("BLACK'S IN CHECK!");
-                        }
-                    }
-                    else {
-                        if (Main.inCheck(Main.getWhiteKing())) {
-                            System.out.println("WHITE'S IN CHECK!");
-                        }
-                    }
                     return;
+                }
+            }
+
+            if (Main.getSelectedPiece().getIdentifier() == ChessPiece.PAWN && (this.xPos == 0 || this.xPos == 7)) {
+                if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
+
+                }
+                else if (Main.getSelectedPiece().getColor() == ChessPiece.BLACK && this.xPos == 7) {
+
                 }
             }
 
@@ -622,16 +621,10 @@ public class BoardSquare implements MouseListener{
             Main.resetTargetted();
             Main.toggleTurn();
 
-            if (this.getPiece().getColor() == ChessPiece.BLACK) {
-                if (Main.inCheck(Main.getBlackKing())) {
-                    System.out.println("BLACK'S IN CHECK!");
-                }
+            if (this.getPiece().getColor() == ChessPiece.WHITE && Main.getTurnNumber() == 1) {
+                Main.startTimer();
             }
-            else {
-                if (Main.inCheck(Main.getWhiteKing())) {
-                    System.out.println("WHITE'S IN CHECK!");
-                }
-            }
+
         }
         else {
             Main.resetTargetted();
@@ -642,5 +635,9 @@ public class BoardSquare implements MouseListener{
     }
 
     public void mouseExited(MouseEvent e) {
+    }
+
+    public int promptForPromotion() {
+        return 0;
     }
 }

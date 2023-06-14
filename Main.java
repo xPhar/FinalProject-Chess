@@ -39,8 +39,14 @@ public class Main {
     private static ChessPiece whiteKing;
     private static ChessPiece blackKing;
 
-    private static int whiteTimer = 600;
-    private static int blackTimer = 600;
+    private static Timer clockTick;
+
+    private static int whiteTime = 600000;
+    private static JLabel whiteTimeLabel;
+    private static int blackTime = 600000;
+    private static JLabel blackTimeLabel;
+
+    private static DecimalFormat secondsFormatter = new DecimalFormat("00");
 
 
 	/**
@@ -89,7 +95,6 @@ public class Main {
 
         Font labelFont = new Font("/Fonts/Lato-Bold.ttf", Font.BOLD, 24);
         Font timerFont = new Font("Oswald-Bold.ttf", Font.BOLD, 30);
-        DecimalFormat formatter = new DecimalFormat("0:00.00");
         
 
         sidebar.add(Box.createRigidArea(new Dimension(200, 20)));
@@ -103,7 +108,7 @@ public class Main {
 
         sidebar.add(Box.createRigidArea(new Dimension(200, 10)));
 
-        JLabel blackTimeLabel = new JLabel("00:00");
+        blackTimeLabel = new JLabel(String.valueOf(blackTime / 1000 / 60 + ":" + secondsFormatter.format(blackTime / 1000 % 60)));
         blackTimeLabel.setBackground(new Color(0x000000));
         blackTimeLabel.setForeground(new Color(0xF0F0F0));
         blackTimeLabel.setOpaque(true);
@@ -119,6 +124,16 @@ public class Main {
         whitePlayerLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         sidebar.add(whitePlayerLabel);
 
+        sidebar.add(Box.createRigidArea(new Dimension(200, 10)));
+
+        whiteTimeLabel = new JLabel(String.valueOf(whiteTime / 1000 / 60 + ":" + secondsFormatter.format(whiteTime / 1000 % 60)));
+        whiteTimeLabel.setBackground(new Color(0xF0F0F0));
+        whiteTimeLabel.setForeground(new Color(0x101010));
+        whiteTimeLabel.setOpaque(true);
+        whiteTimeLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        whiteTimeLabel.setFont(timerFont);
+        sidebar.add(whiteTimeLabel);
+
         contentPane.add(sidebar, BorderLayout.EAST);
 
         // Create starting gameboard
@@ -131,6 +146,8 @@ public class Main {
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
+
+        clockTick = new Timer(10, new TimerTick());
 	}
 
 
@@ -147,12 +164,19 @@ public class Main {
         return activePieces;
     }
 
+    public static int getTurnNumber() {
+        return moveCount;
+    }
+
     public static boolean getTurn() {
         return colorToMove;
     }
 
     public static void toggleTurn() {
         colorToMove = !colorToMove;
+        if (colorToMove == ChessPiece.WHITE) {
+            moveCount++;
+        }
     }
 
     public static boolean inCheck(ChessPiece king) {
@@ -401,6 +425,10 @@ public class Main {
         return whiteKing;
     }
 
+    public static void startTimer() {
+        clockTick.start();
+    }
+
     /**
      * EVENT LISTENERS
      * Subclasses that handle events (button clicks, mouse clicks and moves,
@@ -410,13 +438,14 @@ public class Main {
 
     private static class TimerTick extends AbstractAction {
         public void actionPerformed(ActionEvent event) {
-            blackTimer--;
-            if (blackTimer == 0) {
-                // TODO: endGame(black) <-- Black loses game
+            if (colorToMove == ChessPiece.WHITE) {
+                whiteTime -= 15;
             }
+            else {
+                blackTime -= 15;
+            }
+            whiteTimeLabel.setText(String.valueOf(whiteTime / 1000 / 60 + ":" + secondsFormatter.format(whiteTime / 1000 % 60)));
+            blackTimeLabel.setText(String.valueOf(blackTime / 1000 / 60 + ":" + secondsFormatter.format(blackTime / 1000 % 60)));
         }
     }
-
-
-
 }
