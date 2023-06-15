@@ -602,7 +602,7 @@ public class BoardSquare implements MouseListener{
         if (this.isHighlighted) {
             return;
         }
-        if (this.isTargeted && e.getButton(MouseEvent.BUTTON1)) {
+        if (this.isTargeted && e.getButton() == MouseEvent.BUTTON1) {
             if (Main.getSelectedPiece().getIdentifier() == ChessPiece.KING && this.hasPiece() && this.getPiece().getIdentifier() == ChessPiece.ROOK
                     && Main.getSelectedPiece().getColor() == this.getPiece().getColor()) {
                 int kingxPos = Main.getSelectedPiece().getBoardSquare().getxPos();
@@ -655,6 +655,9 @@ public class BoardSquare implements MouseListener{
                     }
                 }
 
+                if (this.hasPiece()) {
+                    this.getPiece().removePiece();
+                }
                 Main.getSelectedPiece().getBoardSquare().removePiece();
                 removePiece();
                 this.setPiece(Main.getSelectedPiece());
@@ -664,10 +667,39 @@ public class BoardSquare implements MouseListener{
                 Main.setLastMoved(Main.getSelectedPiece());
             }
 
+            boolean hasLegalMove = false;
+
             if (Main.getTurn() == ChessPiece.WHITE) {
                 if (Main.inCheck(Main.getBlackKing())) {
-                    if (getLegalMoves().size() != 0) {
-                        //TODO:
+                    for (ChessPiece piece : Main.getPieceList()) {
+                        if (piece.getColor() == ChessPiece.WHITE) {
+                            continue;
+                        }
+                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                            System.out.println(piece.getBoardSquare().getxPos() + " " + piece.getBoardSquare().getyPos());
+                            hasLegalMove = true;
+                            break;
+                        }
+                    }
+                    if (!hasLegalMove) {
+                        System.out.println("checkmate white");
+                    }
+                }
+            }
+            else {
+                if (Main.inCheck(Main.getWhiteKing())) {
+                    for (ChessPiece piece : Main.getPieceList()) {
+                        if (piece.getColor() == ChessPiece.BLACK) {
+                            continue;
+                        }
+                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                            System.out.println(piece.getBoardSquare().getxPos() + " " + piece.getBoardSquare().getyPos());
+                            hasLegalMove = true;
+                            break;
+                        }
+                    }
+                    if (!hasLegalMove) {
+                        System.out.println("checkmate black");
                     }
                 }
             }
