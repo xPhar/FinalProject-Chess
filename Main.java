@@ -28,6 +28,8 @@ public class Main {
 
     private static ChessPiece selectedPiece;
 
+    private static ChessPiece lastMovedPiece = null;
+
     private static BoardSquare[][] boardSquares;
 
     private static ArrayList<ChessPiece> activePieces;
@@ -427,6 +429,14 @@ public class Main {
 
     public static void startTimer() {
         clockTick.start();
+    }
+
+    public static void setLastMoved(ChessPiece piece) {
+        lastMovedPiece = piece;
+    }
+
+    public static ChessPiece getLastMoved() {
+        return lastMovedPiece;
     }
 
     /**

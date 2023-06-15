@@ -3,9 +3,8 @@ Project Task List:
 CURRENT FOCUS:
 
 Next Up:
-En Passant
 Checkmate
-Castling
+Promotion
 Settings
 PGN
 

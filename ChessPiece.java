@@ -8,7 +8,6 @@ public class ChessPiece{
     private String name;
     private int value;
     private int identifier;
-    private boolean alive = true;
     private boolean hasMoved = false;
     private boolean color;
     private int xPos;
@@ -94,11 +93,7 @@ public class ChessPiece{
     }
 
     public void removePiece() {
-        this.alive = false;
-    }
-
-    public boolean isAlive() {
-        return alive;
+        Main.getPieceList().remove(this);
     }
 
     public int getValue() {
