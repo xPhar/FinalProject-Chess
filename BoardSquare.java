@@ -4,6 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class BoardSquare implements MouseListener{
@@ -15,6 +17,7 @@ public class BoardSquare implements MouseListener{
     private Color highlightedColor = new Color(0xF5D16E);
     private boolean isHighlighted = false;
     private boolean isTargeted = false;
+    private boolean selectingPromotion = false;
 
     public BoardSquare(JPanel parentPanel, int xPos, int yPos, Color color) {
         this.baseColor = color;
@@ -546,6 +549,36 @@ public class BoardSquare implements MouseListener{
         return legalMoves;
     }
 
+    public JPanel getPanel() {
+        return this.panel;
+    }
+
+    public boolean isSelectingPromotion() {
+        return selectingPromotion;
+    }
+
+    public void promptForPromotion() {
+        if (hasPiece()) {
+            getPiece().getLabel().setVisible(false);
+        }
+        JLabel replacementLabel = null;
+        selectingPromotion = true;
+        if (xPos == 0 || xPos == 7) {
+            replacementLabel = new JLabel(new ImageIcon("Pieces/WhiteQueen.png"));
+        }
+        if (xPos == 1 || xPos == 6) {
+            replacementLabel = new JLabel(new ImageIcon("Pieces/WhiteRook.png"));
+        }
+        if (xPos == 2 || xPos == 5) {
+            replacementLabel = new JLabel(new ImageIcon("Pieces/WhiteKnight.png"));
+        }
+        if (xPos == 3 || xPos == 4) {
+            replacementLabel = new JLabel(new ImageIcon("Pieces/WhiteBishop.png"));
+        }
+        getPanel().add(replacementLabel);
+        Main.setWaitingForPromotion();
+    }
+
     public void mousePressed(MouseEvent e) {
         if (this.isTargeted) {
             return;
@@ -602,6 +635,42 @@ public class BoardSquare implements MouseListener{
         if (this.isHighlighted) {
             return;
         }
+        if (e.getButton() == MouseEvent.BUTTON1) {
+            if (Main.isWaitingForPromotion()) {
+                System.out.println(isSelectingPromotion());
+                if (!isSelectingPromotion()) {
+                    return;
+                }
+                else {
+                    boolean color;
+                    if (xPos < 4) {
+                        color = ChessPiece.WHITE;
+                    }
+                    else {
+                        color = ChessPiece.BLACK;
+                    }
+                    // TODO: FIX THIS MESS; SHOULD REMOVE ONLY THE PAWN AND REPLACE WITH OTHER THINGY
+                    getPiece().removePiece();
+                    removePiece();
+                    if (xPos == 0 || xPos == 7) {
+                        setPiece(new ChessPiece(5, color, this, getxPos(), getyPos()));
+                    }
+                    if (xPos == 1 || xPos == 6) {
+                        setPiece(new ChessPiece(4, color, this, getxPos(), getyPos()));
+                    }
+                    if (xPos == 2 || xPos == 5) {
+                        setPiece(new ChessPiece(2, color, this, getxPos(), getyPos()));
+                    }
+                    if (xPos == 3 || xPos == 4) {
+                        setPiece(new ChessPiece(3, color, this, getxPos(), getyPos()));
+                    }
+                }
+                for (int i = 0; i < 4; i++) {
+                    Main.getBoard()[i][yPos].getPanel().remove(0);
+                }
+                Main.removeWaitingForPromotion();
+            }
+        }
         if (this.isTargeted && e.getButton() == MouseEvent.BUTTON1) {
             if (Main.getSelectedPiece().getIdentifier() == ChessPiece.KING && this.hasPiece() && this.getPiece().getIdentifier() == ChessPiece.ROOK
                     && Main.getSelectedPiece().getColor() == this.getPiece().getColor()) {
@@ -648,7 +717,10 @@ public class BoardSquare implements MouseListener{
                         }
                     }
                     else if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
-
+                        for (int i = 0; i < 4; i++) {
+                            Main.getBoard()[i][yPos].promptForPromotion();
+                        }
+                        return;
                     }
                     else if (Main.getSelectedPiece().getColor() == ChessPiece.BLACK && this.xPos == 7) {
 
@@ -721,9 +793,5 @@ public class BoardSquare implements MouseListener{
     }
 
     public void mouseExited(MouseEvent e) {
-    }
-
-    public int promptForPromotion() {
-        return 0;
     }
 }

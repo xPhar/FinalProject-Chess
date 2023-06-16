@@ -43,6 +43,8 @@ public class Main {
 
     private static Timer clockTick;
 
+    private static boolean waitingForPromotion = false;
+
     private static int whiteTime = 600000;
     private static JLabel whiteTimeLabel;
     private static int blackTime = 600000;
@@ -437,6 +439,18 @@ public class Main {
 
     public static ChessPiece getLastMoved() {
         return lastMovedPiece;
+    }
+
+    public static boolean isWaitingForPromotion() {
+        return waitingForPromotion;
+    }
+
+    public static void setWaitingForPromotion() {
+        waitingForPromotion = true;
+    }
+    
+    public static void removeWaitingForPromotion() {
+        waitingForPromotion = false;
     }
 
     /**
