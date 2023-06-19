@@ -638,6 +638,10 @@ public class BoardSquare implements MouseListener{
             return;
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
+            String turnLog = "";
+            if (Main.getTurn() == ChessPiece.WHITE) {
+                turnLog = String.valueOf(Main.getTurnNumber() + ".");
+            }
             if (Main.isWaitingForPromotion()) {
                 if (!isSelectingPromotion()) {
                     return;
@@ -645,8 +649,7 @@ public class BoardSquare implements MouseListener{
                 else {
                     Main.getSelectedPiece().getBoardSquare().removePiece();
                     Main.getSelectedPiece().removePiece();
-                    Main.getSelectedPiece().getBoardSquare().setHighlighed();
-                    Main.getSelectedPiece().getBoardSquare().removeHighlight();
+                    Main.revalidate();
                     
                     if (xPos < 4) {
                         for (int i = 0; i < 4; i++) {
@@ -695,129 +698,154 @@ public class BoardSquare implements MouseListener{
                         }
                     }
                 }
+                // TODO: ADD FUNCTIONALITY FOR BLACK
+                if (Main.getTurn() == ChessPiece.WHITE) {
+                    turnLog += Main.columnNumberToLetter(yPos);
+                    turnLog += String.valueOf(yPos);
+                    turnLog += "=";
+                    turnLog += Main.identifierToLetter(Main.getBoard()[0][yPos].getPiece().getIdentifier());
+                }
+
+                System.out.println(turnLog);
 
                 Main.revalidate();
                 Main.removeWaitingForPromotion();
                 Main.resetTargetted();
                 Main.toggleTurn();
 
+                
+
                 return;
             }
-        }
-        if (this.isTargeted && e.getButton() == MouseEvent.BUTTON1) {
-            if (Main.getSelectedPiece().getIdentifier() == ChessPiece.KING && this.hasPiece() && this.getPiece().getIdentifier() == ChessPiece.ROOK
-                    && Main.getSelectedPiece().getColor() == this.getPiece().getColor()) {
-                int kingxPos = Main.getSelectedPiece().getBoardSquare().getxPos();
-                int kingyPos = Main.getSelectedPiece().getBoardSquare().getyPos();
-                BoardSquare kingNewSquare;
-                BoardSquare rookNewSquare;
-                if (kingyPos < this.getyPos()) {
-                    kingNewSquare = Main.getBoard()[kingxPos][kingyPos + 2];
-                    rookNewSquare = Main.getBoard()[kingxPos][kingyPos + 1];
+            if (this.isTargeted) {
+                if (Main.getSelectedPiece().getIdentifier() == ChessPiece.KING && this.hasPiece() && this.getPiece().getIdentifier() == ChessPiece.ROOK
+                        && Main.getSelectedPiece().getColor() == this.getPiece().getColor()) {
+                    int kingxPos = Main.getSelectedPiece().getBoardSquare().getxPos();
+                    int kingyPos = Main.getSelectedPiece().getBoardSquare().getyPos();
+                    BoardSquare kingNewSquare;
+                    BoardSquare rookNewSquare;
+                    if (kingyPos < this.getyPos()) {
+                        kingNewSquare = Main.getBoard()[kingxPos][kingyPos + 2];
+                        rookNewSquare = Main.getBoard()[kingxPos][kingyPos + 1];
+                        turnLog += "O-O";
+                    }
+                    else {
+                        kingNewSquare = Main.getBoard()[kingxPos][kingyPos - 2];
+                        rookNewSquare = Main.getBoard()[kingxPos][kingyPos - 1];
+                        turnLog += "O-O-O";
+                    }
+
+                    Main.getSelectedPiece().getBoardSquare().removePiece();
+                    kingNewSquare.setPiece(Main.getSelectedPiece());
+                    Main.getSelectedPiece().setBoardSquare(kingNewSquare);
+                    Main.getSelectedPiece().pieceMoved();
+                    rookNewSquare.setPiece(this.getPiece());
+                    getPiece().setBoardSquare(rookNewSquare);
+                    removePiece();
+
+                    // Update board to ensure piece remains visible
+                    Main.revalidate();
+
+                    Main.setLastMoved(kingNewSquare.getPiece());
                 }
                 else {
-                    kingNewSquare = Main.getBoard()[kingxPos][kingyPos - 2];
-                    rookNewSquare = Main.getBoard()[kingxPos][kingyPos - 1];
+                    if (Main.getSelectedPiece().getIdentifier() == ChessPiece.PAWN) {
+                        if (Main.getLastMoved() != null && Main.getLastMoved().getIdentifier() == ChessPiece.PAWN && Main.getLastMoved().getBoardSquare().getxPos() == getxPos() - 1) {
+                            if (xPos - 1 >= 0 && yPos - 1 >= 0 && Main.getBoard()[xPos - 1][yPos - 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos - 1 >= 0 && yPos + 1 < 8 && Main.getBoard()[xPos - 1][yPos + 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos + 1 < 8 && yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos + 1 < 8 && yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].getPiece() == Main.getSelectedPiece()) {
+                                Main.getLastMoved().getBoardSquare().removePiece();
+                                // Ensures GUI updates to reflect piece no longer existing
+                                Main.revalidate();
+                                Main.getLastMoved().removePiece();
+                                System.err.println("idk what this is");
+                            }
+                        }
+                        else if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
+                            for (int i = 0; i < 4; i++) {
+                                Main.getBoard()[i][yPos].promptForPromotion();
+                            }
+                            return;
+                        }
+                        else if (Main.getSelectedPiece().getColor() == ChessPiece.BLACK && this.xPos == 7) {
+                            for (int i = 7; i > 3; i--) {
+                                Main.getBoard()[i][yPos].promptForPromotion();
+                            }
+                            return;
+                        }
+                    }
+
+                    if (Main.getSelectedPiece().getIdentifier() == 1) {
+                        turnLog += Main.getSelectedPiece().getBoardSquare().getyPos(); //TODO: I AM HERE, MAKE TURNS DO TURN THINGS
+                    }
+                    turnLog += Main.identifierToLetter(Main.getSelectedPiece().getIdentifier());
+                    if (this.hasPiece()) {
+                        turnLog += "x";
+                    }
+                    turnLog += Main.columnNumberToLetter(yPos);
+                    turnLog += String.valueOf(xPos);
+
+                    System.out.println(turnLog);
+
+                    if (this.hasPiece()) {
+                        this.getPiece().removePiece();
+                    }
+                    Main.getSelectedPiece().getBoardSquare().removePiece();
+                    removePiece();
+                    this.setPiece(Main.getSelectedPiece());
+                    getPiece().setBoardSquare(this);
+                    getPiece().pieceMoved();
+
+                    Main.setLastMoved(Main.getSelectedPiece());
                 }
 
-                Main.getSelectedPiece().getBoardSquare().removePiece();
-                kingNewSquare.setPiece(Main.getSelectedPiece());
-                Main.getSelectedPiece().setBoardSquare(kingNewSquare);
-                Main.getSelectedPiece().pieceMoved();
-                rookNewSquare.setPiece(this.getPiece());
-                getPiece().setBoardSquare(rookNewSquare);
-                removePiece();
+                boolean hasLegalMove = false;
 
-                // Update board to ensure piece remains visible
-                Main.revalidate();
+                if (Main.getTurn() == ChessPiece.WHITE) {
+                    if (Main.inCheck(Main.getBlackKing())) {
+                        for (ChessPiece piece : Main.getPieceList()) {
+                            if (piece.getColor() == ChessPiece.WHITE) {
+                                continue;
+                            }
+                            if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                                hasLegalMove = true;
+                                break;
+                            }
+                        }
+                        if (!hasLegalMove) {
+                            System.out.println("checkmate white");
+                        }
+                    }
+                }
+                else {
+                    if (Main.inCheck(Main.getWhiteKing())) {
+                        for (ChessPiece piece : Main.getPieceList()) {
+                            if (piece.getColor() == ChessPiece.BLACK) {
+                                continue;
+                            }
+                            if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                                hasLegalMove = true;
+                                break;
+                            }
+                        }
+                        if (!hasLegalMove) {
+                            System.out.println("checkmate black");
+                        }
+                    }
+                }
 
-                Main.setLastMoved(kingNewSquare.getPiece());
+                Main.resetTargetted();
+                Main.toggleTurn();
+
+                if (this.getPiece().getColor() == ChessPiece.WHITE && Main.getTurnNumber() == 1) {
+                    Main.startTimer();
+                }
+
             }
             else {
-                if (Main.getSelectedPiece().getIdentifier() == ChessPiece.PAWN) {
-                    if (Main.getLastMoved() != null && Main.getLastMoved().getIdentifier() == ChessPiece.PAWN && (Main.getLastMoved().getBoardSquare().getxPos() == getxPos() - 1
-                            || Main.getLastMoved().getBoardSquare().getxPos() == getxPos() - 1)) {
-                        if (xPos - 1 >= 0 && yPos - 1 >= 0 && Main.getBoard()[xPos - 1][yPos - 1].getPiece() == Main.getSelectedPiece()
-                                || xPos - 1 >= 0 && yPos + 1 < 8 && Main.getBoard()[xPos - 1][yPos + 1].getPiece() == Main.getSelectedPiece()
-                                || xPos + 1 < 8 && yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].getPiece() == Main.getSelectedPiece()
-                                || xPos + 1 < 8 && yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].getPiece() == Main.getSelectedPiece()) {
-                            Main.getLastMoved().getBoardSquare().removePiece();
-                            // Ensures GUI updates to reflect piece no longer existing
-                            Main.revalidate();
-                            Main.getLastMoved().removePiece();
-                        }
-                    }
-                    else if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
-                        for (int i = 0; i < 4; i++) {
-                            Main.getBoard()[i][yPos].promptForPromotion();
-                        }
-                        return;
-                    }
-                    else if (Main.getSelectedPiece().getColor() == ChessPiece.BLACK && this.xPos == 7) {
-                        for (int i = 7; i > 3; i--) {
-                            Main.getBoard()[i][yPos].promptForPromotion();
-                        }
-                        return;
-                    }
-                }
-
-                if (this.hasPiece()) {
-                    this.getPiece().removePiece();
-                }
-                Main.getSelectedPiece().getBoardSquare().removePiece();
-                removePiece();
-                this.setPiece(Main.getSelectedPiece());
-                getPiece().setBoardSquare(this);
-                getPiece().pieceMoved();
-
-                Main.setLastMoved(Main.getSelectedPiece());
+                Main.resetTargetted();
             }
-
-            boolean hasLegalMove = false;
-
-            if (Main.getTurn() == ChessPiece.WHITE) {
-                if (Main.inCheck(Main.getBlackKing())) {
-                    for (ChessPiece piece : Main.getPieceList()) {
-                        if (piece.getColor() == ChessPiece.WHITE) {
-                            continue;
-                        }
-                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                            hasLegalMove = true;
-                            break;
-                        }
-                    }
-                    if (!hasLegalMove) {
-                        System.out.println("checkmate white");
-                    }
-                }
-            }
-            else {
-                if (Main.inCheck(Main.getWhiteKing())) {
-                    for (ChessPiece piece : Main.getPieceList()) {
-                        if (piece.getColor() == ChessPiece.BLACK) {
-                            continue;
-                        }
-                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                            hasLegalMove = true;
-                            break;
-                        }
-                    }
-                    if (!hasLegalMove) {
-                        System.out.println("checkmate black");
-                    }
-                }
-            }
-
-            Main.resetTargetted();
-            Main.toggleTurn();
-
-            if (this.getPiece().getColor() == ChessPiece.WHITE && Main.getTurnNumber() == 1) {
-                Main.startTimer();
-            }
-
-        }
-        else {
-            Main.resetTargetted();
         }
     }
 

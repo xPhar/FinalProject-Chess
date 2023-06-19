@@ -2,6 +2,10 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import javax.swing.colorchooser.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import java.util.ArrayList;
 import java.text.DecimalFormat;
 
@@ -139,6 +143,8 @@ public class Main {
         whiteTimeLabel.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         whiteTimeLabel.setFont(timerFont);
         sidebar.add(whiteTimeLabel);
+
+        
 
         contentPane.add(sidebar, BorderLayout.EAST);
 
@@ -457,6 +463,49 @@ public class Main {
 
     public static void revalidate() {
         contentPane.revalidate();
+    }
+
+    public static void checkmate(boolean color) {
+        
+    }
+
+    public static String identifierToLetter(int identifier) {
+        switch (identifier) {
+            case 2:
+                return "N";
+            case 3:
+                return "B";
+            case 4:
+                return "R";
+            case 5:
+                return "Q";
+            case 6:
+                return "K";
+        }
+        return "";
+    }
+
+    public static String columnNumberToLetter(int number) {
+        switch (number) {
+            case 0:
+                return "a";
+            case 1: 
+                return "b";
+            case 2:
+                return "c";
+            case 3:
+                return "d";
+            case 4:
+                return "e";
+            case 5:
+                return "f";
+            case 6:
+                return "g";
+            case 7:
+                return "f";
+        }
+        return "";
+    
     }
 
     /**

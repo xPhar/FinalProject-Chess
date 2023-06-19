@@ -1,7 +1,7 @@
 Project Task List:
 
 CURRENT FOCUS:
-fixing some dumb ass bug
+fixing some dumb bug
 
 Next Up:
 Settings
