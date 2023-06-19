@@ -638,9 +638,12 @@ public class BoardSquare implements MouseListener{
             return;
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
-            String turnLog = "";
+            String turnLog = " ";
+            if (Main.getTurnNumber() == 1 && Main.getTurn() == ChessPiece.WHITE) {
+                turnLog = "";
+            }
             if (Main.getTurn() == ChessPiece.WHITE) {
-                turnLog = String.valueOf(Main.getTurnNumber() + ".");
+                turnLog += String.valueOf(Main.getTurnNumber() + ".");
             }
             if (Main.isWaitingForPromotion()) {
                 if (!isSelectingPromotion()) {
@@ -706,14 +709,12 @@ public class BoardSquare implements MouseListener{
                     turnLog += Main.identifierToLetter(Main.getBoard()[0][yPos].getPiece().getIdentifier());
                 }
 
-                System.out.println(turnLog);
-
                 Main.revalidate();
                 Main.removeWaitingForPromotion();
                 Main.resetTargetted();
                 Main.toggleTurn();
 
-                
+                Main.updateMoveLog(turnLog);
 
                 return;
             }
@@ -776,17 +777,15 @@ public class BoardSquare implements MouseListener{
                         }
                     }
 
-                    if (Main.getSelectedPiece().getIdentifier() == 1) {
-                        turnLog += Main.getSelectedPiece().getBoardSquare().getyPos(); //TODO: I AM HERE, MAKE TURNS DO TURN THINGS
-                    }
                     turnLog += Main.identifierToLetter(Main.getSelectedPiece().getIdentifier());
                     if (this.hasPiece()) {
+                        if (Main.getSelectedPiece().getIdentifier() == 1) {
+                            turnLog += Main.columnNumberToLetter(Main.getSelectedPiece().getBoardSquare().getyPos());
+                        }
                         turnLog += "x";
                     }
                     turnLog += Main.columnNumberToLetter(yPos);
-                    turnLog += String.valueOf(xPos);
-
-                    System.out.println(turnLog);
+                    turnLog += String.valueOf(Math.abs(xPos - 8));
 
                     if (this.hasPiece()) {
                         this.getPiece().removePiece();
@@ -804,6 +803,9 @@ public class BoardSquare implements MouseListener{
 
                 if (Main.getTurn() == ChessPiece.WHITE) {
                     if (Main.inCheck(Main.getBlackKing())) {
+
+                        turnLog += "#";
+
                         for (ChessPiece piece : Main.getPieceList()) {
                             if (piece.getColor() == ChessPiece.WHITE) {
                                 continue;
@@ -814,12 +816,18 @@ public class BoardSquare implements MouseListener{
                             }
                         }
                         if (!hasLegalMove) {
+                            turnLog += " 1-0";
+                            Main.updateMoveLog(turnLog);
+                            Main.checkmate(ChessPiece.WHITE);
                             System.out.println("checkmate white");
                         }
                     }
                 }
                 else {
                     if (Main.inCheck(Main.getWhiteKing())) {
+
+                        turnLog += "#";
+
                         for (ChessPiece piece : Main.getPieceList()) {
                             if (piece.getColor() == ChessPiece.BLACK) {
                                 continue;
@@ -830,10 +838,15 @@ public class BoardSquare implements MouseListener{
                             }
                         }
                         if (!hasLegalMove) {
+                            turnLog += "0-1";
+                            Main.updateMoveLog(turnLog);
+                            Main.checkmate(ChessPiece.BLACK);
                             System.out.println("checkmate black");
                         }
                     }
                 }
+
+                Main.updateMoveLog(turnLog);
 
                 Main.resetTargetted();
                 Main.toggleTurn();

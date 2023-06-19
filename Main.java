@@ -58,6 +58,7 @@ public class Main {
 
     private static DecimalFormat secondsFormatter = new DecimalFormat("00");
 
+    private static ArrayList<String> moveLog;
 
 	/**
 	 * CREATE MAIN WINDOW
@@ -400,10 +401,11 @@ public class Main {
             for (int j = 0; j < 8; j++) {
                 pieceList.add(board[row2][j].setPiece(new ChessPiece(ChessPiece.PAWN, color, board[row2][j], row2, j)));
             }
-
-            whiteKing = board[7][4].getPiece();
-            blackKing = board[0][4].getPiece();
         }
+        whiteKing = board[7][4].getPiece();
+        blackKing = board[0][4].getPiece();
+
+        moveLog = new ArrayList<String>();
     }
 
     public static void updateHighLight(ChessPiece newHighlighted) {
@@ -466,7 +468,7 @@ public class Main {
     }
 
     public static void checkmate(boolean color) {
-        
+        System.out.println(moveLog);
     }
 
     public static String identifierToLetter(int identifier) {
@@ -502,10 +504,14 @@ public class Main {
             case 6:
                 return "g";
             case 7:
-                return "f";
+                return "h";
         }
         return "";
     
+    }
+
+    public static void updateMoveLog(String currentMove) {
+        moveLog.add(currentMove);
     }
 
     /**
