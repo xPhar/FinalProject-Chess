@@ -26,6 +26,8 @@ public class Main {
      * multiple methods.
 	 */
 
+    private static JPanel contentPane;
+
     private static ChessPiece selectedPiece;
 
     private static ChessPiece lastMovedPiece = null;
@@ -65,7 +67,7 @@ public class Main {
         frame.setSize(new Dimension(1000, 800));
 
 		// The panel that will hold the components in the frame.
-		JPanel contentPane = new JPanel ();
+		contentPane = new JPanel ();
         contentPane.setLayout(new BorderLayout());
         contentPane.setPreferredSize(new Dimension(1000, 800));
 
@@ -451,6 +453,10 @@ public class Main {
     
     public static void removeWaitingForPromotion() {
         waitingForPromotion = false;
+    }
+
+    public static void revalidate() {
+        contentPane.revalidate();
     }
 
     /**

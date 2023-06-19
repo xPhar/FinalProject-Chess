@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -18,6 +19,7 @@ public class BoardSquare implements MouseListener{
     private boolean isHighlighted = false;
     private boolean isTargeted = false;
     private boolean selectingPromotion = false;
+    private JLabel replacementLabel = null;
 
     public BoardSquare(JPanel parentPanel, int xPos, int yPos, Color color) {
         this.baseColor = color;
@@ -561,7 +563,7 @@ public class BoardSquare implements MouseListener{
         if (hasPiece()) {
             getPiece().getLabel().setVisible(false);
         }
-        JLabel replacementLabel = null;
+        replacementLabel = null;
         selectingPromotion = true;
         if (xPos == 0 || xPos == 7) {
             replacementLabel = new JLabel(new ImageIcon("Pieces/WhiteQueen.png"));
@@ -637,38 +639,69 @@ public class BoardSquare implements MouseListener{
         }
         if (e.getButton() == MouseEvent.BUTTON1) {
             if (Main.isWaitingForPromotion()) {
-                System.out.println(isSelectingPromotion());
                 if (!isSelectingPromotion()) {
                     return;
                 }
                 else {
-                    boolean color;
+                    Main.getSelectedPiece().getBoardSquare().removePiece();
+                    Main.getSelectedPiece().removePiece();
+                    Main.getSelectedPiece().getBoardSquare().setHighlighed();
+                    Main.getSelectedPiece().getBoardSquare().removeHighlight();
+                    
                     if (xPos < 4) {
-                        color = ChessPiece.WHITE;
+                        for (int i = 0; i < 4; i++) {
+                            Main.getBoard()[i][yPos].getPanel().remove(Main.getBoard()[i][yPos].getReplacementLabel());;
+                            Main.getBoard()[i][yPos].setHighlighed();
+                            Main.getBoard()[i][yPos].removeHighlight();
+                        }
+                        if (Main.getBoard()[0][yPos].hasPiece()) {
+                            Main.getBoard()[0][yPos].getPiece().removePiece();
+                            Main.getBoard()[0][yPos].removePiece();
+                        }
+                        if (xPos == 0) {
+                            Main.getBoard()[0][yPos].setPiece(new ChessPiece(5, ChessPiece.WHITE, Main.getBoard()[0][yPos], 0, getyPos()));
+                        }
+                        if (xPos == 1) {
+                            Main.getBoard()[0][yPos].setPiece(new ChessPiece(4, ChessPiece.WHITE, Main.getBoard()[0][yPos], 0, getyPos()));
+                        }
+                        if (xPos == 2) {
+                            Main.getBoard()[0][yPos].setPiece(new ChessPiece(2, ChessPiece.WHITE, Main.getBoard()[0][yPos], 0, getyPos()));
+                        }
+                        if (xPos == 3) {
+                            Main.getBoard()[0][yPos].setPiece(new ChessPiece(3, ChessPiece.WHITE, Main.getBoard()[0][yPos], 0, getyPos()));
+                        }
                     }
                     else {
-                        color = ChessPiece.BLACK;
-                    }
-                    // TODO: FIX THIS MESS; SHOULD REMOVE ONLY THE PAWN AND REPLACE WITH OTHER THINGY
-                    getPiece().removePiece();
-                    removePiece();
-                    if (xPos == 0 || xPos == 7) {
-                        setPiece(new ChessPiece(5, color, this, getxPos(), getyPos()));
-                    }
-                    if (xPos == 1 || xPos == 6) {
-                        setPiece(new ChessPiece(4, color, this, getxPos(), getyPos()));
-                    }
-                    if (xPos == 2 || xPos == 5) {
-                        setPiece(new ChessPiece(2, color, this, getxPos(), getyPos()));
-                    }
-                    if (xPos == 3 || xPos == 4) {
-                        setPiece(new ChessPiece(3, color, this, getxPos(), getyPos()));
+                        for (int i = 7; i > 3; i--) {
+                            Main.getBoard()[i][yPos].getPanel().remove(Main.getBoard()[i][yPos].getReplacementLabel());;
+                            Main.getBoard()[i][yPos].setHighlighed();
+                            Main.getBoard()[i][yPos].removeHighlight();
+                        }
+                        if (Main.getBoard()[7][yPos].hasPiece()) {
+                            Main.getBoard()[7][yPos].getPiece().removePiece();
+                            Main.getBoard()[7][yPos].removePiece();
+                        }
+                        if (xPos == 7) {
+                            Main.getBoard()[7][yPos].setPiece(new ChessPiece(5, ChessPiece.BLACK, Main.getBoard()[7][yPos], 7, getyPos()));
+                        }
+                        if (xPos == 6) {
+                            Main.getBoard()[7][yPos].setPiece(new ChessPiece(4, ChessPiece.BLACK, Main.getBoard()[7][yPos], 7, getyPos()));
+                        }
+                        if (xPos == 5) {
+                            Main.getBoard()[7][yPos].setPiece(new ChessPiece(2, ChessPiece.BLACK, Main.getBoard()[7][yPos], 7, getyPos()));
+                        }
+                        if (xPos == 4) {
+                            Main.getBoard()[7][yPos].setPiece(new ChessPiece(3, ChessPiece.BLACK, Main.getBoard()[7][yPos], 7, getyPos()));
+                        }
                     }
                 }
-                for (int i = 0; i < 4; i++) {
-                    Main.getBoard()[i][yPos].getPanel().remove(0);
-                }
+
+                Main.revalidate();
                 Main.removeWaitingForPromotion();
+                Main.resetTargetted();
+                Main.toggleTurn();
+
+                return;
             }
         }
         if (this.isTargeted && e.getButton() == MouseEvent.BUTTON1) {
@@ -695,9 +728,8 @@ public class BoardSquare implements MouseListener{
                 getPiece().setBoardSquare(rookNewSquare);
                 removePiece();
 
-                // Update square to ensure piece remains visible
-                kingNewSquare.setHighlighed();
-                kingNewSquare.removeHighlight();
+                // Update board to ensure piece remains visible
+                Main.revalidate();
 
                 Main.setLastMoved(kingNewSquare.getPiece());
             }
@@ -711,8 +743,7 @@ public class BoardSquare implements MouseListener{
                                 || xPos + 1 < 8 && yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].getPiece() == Main.getSelectedPiece()) {
                             Main.getLastMoved().getBoardSquare().removePiece();
                             // Ensures GUI updates to reflect piece no longer existing
-                            Main.getLastMoved().getBoardSquare().setHighlighed();
-                            Main.getLastMoved().getBoardSquare().removeHighlight();
+                            Main.revalidate();
                             Main.getLastMoved().removePiece();
                         }
                     }
@@ -723,7 +754,10 @@ public class BoardSquare implements MouseListener{
                         return;
                     }
                     else if (Main.getSelectedPiece().getColor() == ChessPiece.BLACK && this.xPos == 7) {
-
+                        for (int i = 7; i > 3; i--) {
+                            Main.getBoard()[i][yPos].promptForPromotion();
+                        }
+                        return;
                     }
                 }
 
@@ -748,7 +782,6 @@ public class BoardSquare implements MouseListener{
                             continue;
                         }
                         if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                            System.out.println(piece.getBoardSquare().getxPos() + " " + piece.getBoardSquare().getyPos());
                             hasLegalMove = true;
                             break;
                         }
@@ -765,7 +798,6 @@ public class BoardSquare implements MouseListener{
                             continue;
                         }
                         if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                            System.out.println(piece.getBoardSquare().getxPos() + " " + piece.getBoardSquare().getyPos());
                             hasLegalMove = true;
                             break;
                         }
@@ -787,6 +819,12 @@ public class BoardSquare implements MouseListener{
         else {
             Main.resetTargetted();
         }
+    }
+
+    private Component getReplacementLabel() {
+        Component toReturn = replacementLabel;
+        replacementLabel = null;
+        return toReturn;
     }
 
     public void mouseEntered(MouseEvent e) {
