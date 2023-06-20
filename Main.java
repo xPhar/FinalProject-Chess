@@ -145,7 +145,22 @@ public class Main {
         whiteTimeLabel.setFont(timerFont);
         sidebar.add(whiteTimeLabel);
 
-        
+        sidebar.add(Box.createVerticalGlue());
+
+        JLabel moveLogTitle = new JLabel("Move Log");
+        moveLogTitle.setFont(new Font("/Fonts/Lato-Bold.ttf", Font.BOLD, 12));
+        moveLogTitle.setForeground(Color.WHITE);
+        moveLogTitle.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+        sidebar.add(moveLogTitle);
+
+        JTextArea moveLog = new JTextArea(4, 1);
+        moveLog.setMaximumSize(new Dimension(200, 150));
+        moveLog.setPreferredSize(new Dimension(200, 150));
+        moveLog.setBackground(new Color(0x303034));
+        moveLog.setForeground(Color.WHITE);
+        moveLog.setEditable(false);
+        moveLog.setText("Test test test haha");
+        sidebar.add(moveLog);
 
         contentPane.add(sidebar, BorderLayout.EAST);
 
@@ -467,7 +482,18 @@ public class Main {
         contentPane.revalidate();
     }
 
-    public static void checkmate(boolean color) {
+    public static void endGame(boolean color) {
+        if (color == ChessPiece.WHITE) {
+            System.out.println("White Wins!");
+        }
+        else {
+            System.out.println("Black Wins!");
+        }
+        System.out.println(moveLog);
+    }
+
+    public static void endGame(String result) {
+        System.out.println("Draw - " + result + "!");
         System.out.println(moveLog);
     }
 

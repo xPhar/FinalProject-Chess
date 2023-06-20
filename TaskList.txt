@@ -2,11 +2,9 @@ Project Task List:
 
 CURRENT FOCUS:
 MAKE TIES WORK
-- For Stalemate: modify checkmate code (should be easy)
 - For repetition: use turnlog i guess maybe idk???
-- For 50 move rule: just don't fuck that shit
 - Add Resignation
-- Add draw offer? Prolly not tbh kinda cringe to draw
+- Move Log
 
 Next Up:
 Settings

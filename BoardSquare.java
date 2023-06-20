@@ -657,8 +657,13 @@ public class BoardSquare implements MouseListener{
                     if (xPos < 4) {
                         for (int i = 0; i < 4; i++) {
                             Main.getBoard()[i][yPos].getPanel().remove(Main.getBoard()[i][yPos].getReplacementLabel());;
+                            if (Main.getBoard()[i][yPos].hasPiece()) {
+                                Main.getBoard()[i][yPos].getPiece().getLabel().setVisible(true);
+                            }
+                            // Used to ensure GUI removes previous selections
                             Main.getBoard()[i][yPos].setHighlighed();
                             Main.getBoard()[i][yPos].removeHighlight();
+                            Main.revalidate();
                         }
                         if (Main.getBoard()[0][yPos].hasPiece()) {
                             Main.getBoard()[0][yPos].getPiece().removePiece();
@@ -701,12 +706,17 @@ public class BoardSquare implements MouseListener{
                         }
                     }
                 }
-                // TODO: ADD FUNCTIONALITY FOR BLACK
                 if (Main.getTurn() == ChessPiece.WHITE) {
+                    turnLog += Main.columnNumberToLetter(yPos);
+                    turnLog += String.valueOf(yPos + 1);
+                    turnLog += "=";
+                    turnLog += Main.identifierToLetter(Main.getBoard()[0][yPos].getPiece().getIdentifier());
+                }
+                else {
                     turnLog += Main.columnNumberToLetter(yPos);
                     turnLog += String.valueOf(yPos);
                     turnLog += "=";
-                    turnLog += Main.identifierToLetter(Main.getBoard()[0][yPos].getPiece().getIdentifier());
+                    turnLog += Main.identifierToLetter(Main.getBoard()[8][yPos].getPiece().getIdentifier());
                 }
 
                 Main.revalidate();
@@ -802,46 +812,58 @@ public class BoardSquare implements MouseListener{
                 boolean hasLegalMove = false;
 
                 if (Main.getTurn() == ChessPiece.WHITE) {
+                    for (ChessPiece piece : Main.getPieceList()) {
+                        if (piece.getColor() == ChessPiece.WHITE) {
+                            continue;
+                        }
+                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                            hasLegalMove = true;
+                            break;
+                        }
+                    }
                     if (Main.inCheck(Main.getBlackKing())) {
-
                         turnLog += "#";
 
-                        for (ChessPiece piece : Main.getPieceList()) {
-                            if (piece.getColor() == ChessPiece.WHITE) {
-                                continue;
-                            }
-                            if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                                hasLegalMove = true;
-                                break;
-                            }
-                        }
+                        
                         if (!hasLegalMove) {
                             turnLog += " 1-0";
                             Main.updateMoveLog(turnLog);
-                            Main.checkmate(ChessPiece.WHITE);
-                            System.out.println("checkmate white");
+                            Main.endGame(ChessPiece.WHITE);
+                        }
+                    }
+                    else {
+                        if (!hasLegalMove) {
+                            turnLog += "1/2-1/2";
+                            Main.updateMoveLog(turnLog);
+                            Main.endGame("Stalemate");
                         }
                     }
                 }
                 else {
+                    for (ChessPiece piece : Main.getPieceList()) {
+                        if (piece.getColor() == ChessPiece.BLACK) {
+                            continue;
+                        }
+                        if (piece.getBoardSquare().getLegalMoves().size() != 0) {
+                            hasLegalMove = true;
+                            break;
+                        }
+                    }
                     if (Main.inCheck(Main.getWhiteKing())) {
 
                         turnLog += "#";
 
-                        for (ChessPiece piece : Main.getPieceList()) {
-                            if (piece.getColor() == ChessPiece.BLACK) {
-                                continue;
-                            }
-                            if (piece.getBoardSquare().getLegalMoves().size() != 0) {
-                                hasLegalMove = true;
-                                break;
-                            }
-                        }
+                        
                         if (!hasLegalMove) {
                             turnLog += "0-1";
                             Main.updateMoveLog(turnLog);
-                            Main.checkmate(ChessPiece.BLACK);
+                            Main.endGame(ChessPiece.BLACK);
                             System.out.println("checkmate black");
+                        }
+                    }
+                    else {
+                        if (!hasLegalMove) {
+                            Main.endGame("Stalemate");
                         }
                     }
                 }
