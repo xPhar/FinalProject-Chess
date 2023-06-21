@@ -58,7 +58,8 @@ public class Main {
 
     private static DecimalFormat secondsFormatter = new DecimalFormat("00");
 
-    private static ArrayList<String> moveLog;
+    private static String moveLog;
+    private static JTextArea moveLogTextArea;
 
 	/**
 	 * CREATE MAIN WINDOW
@@ -153,14 +154,15 @@ public class Main {
         moveLogTitle.setAlignmentX(JLabel.CENTER_ALIGNMENT);
         sidebar.add(moveLogTitle);
 
-        JTextArea moveLog = new JTextArea(4, 1);
-        moveLog.setMaximumSize(new Dimension(200, 150));
-        moveLog.setPreferredSize(new Dimension(200, 150));
-        moveLog.setBackground(new Color(0x303034));
-        moveLog.setForeground(Color.WHITE);
-        moveLog.setEditable(false);
-        moveLog.setText("Test test test haha");
-        sidebar.add(moveLog);
+        moveLogTextArea = new JTextArea(4, 1);
+        moveLogTextArea.setMaximumSize(new Dimension(200, 200));
+        moveLogTextArea.setPreferredSize(new Dimension(200, 200));
+        moveLogTextArea.setBackground(new Color(0x303034));
+        moveLogTextArea.setForeground(Color.WHITE);
+        moveLogTextArea.setEditable(false);
+        moveLogTextArea.setLineWrap(true);
+        moveLogTextArea.setWrapStyleWord(true);
+        sidebar.add(moveLogTextArea);
 
         contentPane.add(sidebar, BorderLayout.EAST);
 
@@ -184,22 +186,44 @@ public class Main {
      * Methods that you create to manage repetitive tasks.
      */
 
+    /**
+	 * GET BOARD
+	 * This method returns the boardSquares array which contains every column of board squares
+     * This allows each square to be accessed
+	 */
     public static BoardSquare[][] getBoard() {
         return boardSquares;
     }
 
+    /**
+	 * GET PIECE LIST
+	 * This method returns the piece list, containing all active pieces on the game board
+	 */
     public static ArrayList<ChessPiece> getPieceList() {
         return activePieces;
     }
 
+    /**
+	 * GET TURN NUMBER
+	 * This method returns the current turn number in integer form
+	 */
     public static int getTurnNumber() {
         return moveCount;
     }
 
+    /**
+	 * GET TURN
+	 * This method returns which color is currently permitted to move
+	 */
     public static boolean getTurn() {
         return colorToMove;
     }
 
+    /**
+	 * TOGGLE TURN
+	 * When called, this method swaps which colour is permitted to move, and toggles the turn number
+     * if it becomes white's turn
+	 */
     public static void toggleTurn() {
         colorToMove = !colorToMove;
         if (colorToMove == ChessPiece.WHITE) {
@@ -207,6 +231,12 @@ public class Main {
         }
     }
 
+    /**
+	 * IN CHECK
+	 * This method returns true if the given king is in check
+     * This is checked by checking each square that could potentially hold a piece attacking it,
+     * then checking if the piece is of the correct type and colour
+	 */
     public static boolean inCheck(ChessPiece king) {
         boolean kingColor = king.getColor();
         int kingxPos = king.getBoardSquare().getxPos();
@@ -387,6 +417,11 @@ public class Main {
         return false;
     }
     
+    /**
+	 * RESET BOARD
+	 * This method resets the board to a fresh game state,
+     * resetting score, timers, and pieces
+	 */
     public static void resetBoard(BoardSquare[][] board, ArrayList<ChessPiece> pieceList) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -420,9 +455,13 @@ public class Main {
         whiteKing = board[7][4].getPiece();
         blackKing = board[0][4].getPiece();
 
-        moveLog = new ArrayList<String>();
+        moveLog = "";
     }
 
+    /**
+	 * UPDATE HIGHLIGHT
+	 * This method removes highlighting from all pieces, and highlights the requested piece
+	 */
     public static void updateHighLight(ChessPiece newHighlighted) {
         for (ChessPiece piece : getPieceList()) {
             if (piece != newHighlighted) {
@@ -433,10 +472,18 @@ public class Main {
         newHighlighted.getBoardSquare().setHighlighed();
     }
 
+    /**
+	 * GET SELECTED PIECE
+	 * This method returns the currently selected piece
+	 */
     public static ChessPiece getSelectedPiece() {
         return selectedPiece;
     }
 
+    /**
+	 * RESET TARGETTED
+	 * This method removes highlighting from all pieces, and sets the selected piece to null
+	 */
     public static void resetTargetted() {
         for (BoardSquare[] row : getBoard()) {
             for (BoardSquare square : row) {
@@ -446,10 +493,18 @@ public class Main {
         selectedPiece = null;
     }
 
+    /**
+	 * GET BLACK KING
+     * This method returns the black king
+	 */
     public static ChessPiece getBlackKing() {
         return blackKing;
     }
 
+    /**
+	 * GET WHITE KING
+     * This method returns the white king
+	 */
     public static ChessPiece getWhiteKing() {
         return whiteKing;
     }
@@ -489,7 +544,12 @@ public class Main {
         else {
             System.out.println("Black Wins!");
         }
-        System.out.println(moveLog);
+        for (BoardSquare[] column : Main.getBoard()) {
+            for (BoardSquare square : column) {
+                square.getPanel().removeMouseListener(square);
+            }
+        }
+        clockTick.stop();
     }
 
     public static void endGame(String result) {
@@ -537,7 +597,8 @@ public class Main {
     }
 
     public static void updateMoveLog(String currentMove) {
-        moveLog.add(currentMove);
+        moveLog += currentMove;
+        moveLogTextArea.setText(moveLog);
     }
 
     /**
@@ -551,9 +612,15 @@ public class Main {
         public void actionPerformed(ActionEvent event) {
             if (colorToMove == ChessPiece.WHITE) {
                 whiteTime -= 15;
+                if (whiteTime <= 0) {
+                    endGame(ChessPiece.BLACK);
+                }
             }
             else {
                 blackTime -= 15;
+                if (blackTime <= 0) {
+                    endGame(ChessPiece.WHITE);
+                }
             }
             whiteTimeLabel.setText(String.valueOf(whiteTime / 1000 / 60 + ":" + secondsFormatter.format(whiteTime / 1000 % 60)));
             blackTimeLabel.setText(String.valueOf(blackTime / 1000 / 60 + ":" + secondsFormatter.format(blackTime / 1000 % 60)));

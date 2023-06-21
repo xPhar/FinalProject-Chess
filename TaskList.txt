@@ -1,6 +1,8 @@
 Project Task List:
 
 CURRENT FOCUS:
+- Add comments
+- Method Explainations
 MAKE TIES WORK
 - For repetition: use turnlog i guess maybe idk???
 - Add Resignation

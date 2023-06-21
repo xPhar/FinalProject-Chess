@@ -716,7 +716,7 @@ public class BoardSquare implements MouseListener{
                     turnLog += Main.columnNumberToLetter(yPos);
                     turnLog += String.valueOf(yPos);
                     turnLog += "=";
-                    turnLog += Main.identifierToLetter(Main.getBoard()[8][yPos].getPiece().getIdentifier());
+                    turnLog += Main.identifierToLetter(Main.getBoard()[7][yPos].getPiece().getIdentifier());
                 }
 
                 Main.revalidate();
@@ -761,19 +761,19 @@ public class BoardSquare implements MouseListener{
                 }
                 else {
                     if (Main.getSelectedPiece().getIdentifier() == ChessPiece.PAWN) {
+                        // TODO: MAKE THIS WORK
                         if (Main.getLastMoved() != null && Main.getLastMoved().getIdentifier() == ChessPiece.PAWN && Main.getLastMoved().getBoardSquare().getxPos() == getxPos() - 1) {
-                            if (xPos - 1 >= 0 && yPos - 1 >= 0 && Main.getBoard()[xPos - 1][yPos - 1].getPiece() == Main.getSelectedPiece()
-                                    || xPos - 1 >= 0 && yPos + 1 < 8 && Main.getBoard()[xPos - 1][yPos + 1].getPiece() == Main.getSelectedPiece()
-                                    || xPos + 1 < 8 && yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].getPiece() == Main.getSelectedPiece()
-                                    || xPos + 1 < 8 && yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].getPiece() == Main.getSelectedPiece()) {
+                            if (xPos == 6 && yPos - 1 >= 0 && Main.getBoard()[xPos - 1][yPos - 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos == 6 && yPos + 1 < 8 && Main.getBoard()[xPos - 1][yPos + 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos == 2 && yPos - 1 >= 0 && Main.getBoard()[xPos + 1][yPos - 1].getPiece() == Main.getSelectedPiece()
+                                    || xPos == 2 && yPos + 1 < 8 && Main.getBoard()[xPos + 1][yPos + 1].getPiece() == Main.getSelectedPiece()) {
                                 Main.getLastMoved().getBoardSquare().removePiece();
                                 // Ensures GUI updates to reflect piece no longer existing
                                 Main.revalidate();
                                 Main.getLastMoved().removePiece();
-                                System.err.println("idk what this is");
                             }
                         }
-                        else if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
+                        if (Main.getSelectedPiece().getColor() == ChessPiece.WHITE && this.xPos == 0) {
                             for (int i = 0; i < 4; i++) {
                                 Main.getBoard()[i][yPos].promptForPromotion();
                             }
@@ -827,15 +827,25 @@ public class BoardSquare implements MouseListener{
                         
                         if (!hasLegalMove) {
                             turnLog += " 1-0";
+
                             Main.updateMoveLog(turnLog);
+                            Main.resetTargetted();
+                            Main.toggleTurn();
+
                             Main.endGame(ChessPiece.WHITE);
+                            return;
                         }
                     }
                     else {
                         if (!hasLegalMove) {
                             turnLog += "1/2-1/2";
+
                             Main.updateMoveLog(turnLog);
+                            Main.resetTargetted();
+                            Main.toggleTurn();
+
                             Main.endGame("Stalemate");
+                            return;
                         }
                     }
                 }
@@ -855,15 +865,26 @@ public class BoardSquare implements MouseListener{
 
                         
                         if (!hasLegalMove) {
-                            turnLog += "0-1";
+                            turnLog += "0-1"; 
+
                             Main.updateMoveLog(turnLog);
+                            Main.resetTargetted();
+                            Main.toggleTurn();
+
                             Main.endGame(ChessPiece.BLACK);
-                            System.out.println("checkmate black");
+                            return;
                         }
                     }
                     else {
                         if (!hasLegalMove) {
+                            turnLog += "1/2-1/2";
+                            
+                            Main.updateMoveLog(turnLog);
+                            Main.resetTargetted();
+                            Main.toggleTurn();
+
                             Main.endGame("Stalemate");
+                            return;
                         }
                     }
                 }
@@ -876,7 +897,6 @@ public class BoardSquare implements MouseListener{
                 if (this.getPiece().getColor() == ChessPiece.WHITE && Main.getTurnNumber() == 1) {
                     Main.startTimer();
                 }
-
             }
             else {
                 Main.resetTargetted();
